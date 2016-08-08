@@ -39,19 +39,27 @@
     sudo yum install -y centos-release-openstack-mitaka
     sudo yum update -y
     ```
+## Cài đặt công cụ `packstack`
 
-- Cài đặt công cụ `packstack`
+- Cài đặt công cụ packstack đóng gói cho RHEL, CentOS
 
     ```sh
     sudo yum install -y openstack-packstack
     ```
 
-- 
+## Thực thi `packstack` để cài đặt OpenStack
+
+- Thực thi `packstack` để cài OpenStack. Có nhiều tùy chọn khi thực thi packstack, dưới là các tùy chọn.
+
+### Tùy chọn mặc định khi thực thi `packstack`
+
+    ```sh
+    packstack --allinone
+    ```
 
     
     
-    
-    
+- 
 
 ## Ghi chép khác
 - Setup IP cho Centos 7
