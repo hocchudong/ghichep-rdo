@@ -17,7 +17,9 @@
 - Setup ip tĩnh cho máy ảo
 
     ```sh
-    Xem lệnh setup IP ở phía dưới.
+    - Xem lệnh setup IP ở phía dưới.
+    - eth0: Managment: 10.10.10.0/24 , no gateway
+    - eth1: External:  172.16.69.0/24 , gateway 172.16.69.1
     ```
 
 - Cấu hình các gói cơ bản
@@ -38,7 +40,18 @@
     sudo yum update -y
     ```
 
+- Cài đặt công cụ `packstack`
 
+    ```sh
+    sudo yum install -y openstack-packstack
+    ```
+
+- 
+
+    
+    
+    
+    
 
 ## Ghi chép khác
 - Setup IP cho Centos 7
