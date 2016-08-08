@@ -61,7 +61,16 @@
 
     
     
-- 
+- Tùy chọn với dải mạng đã có sẵn
+
+    ```sh
+    packstack --allinone --provision-demo=n --os-neutron-ovs-bridge-mappings=extnet:br-ex --os-neutron-ovs-bridge-interfaces=br-ex:eth1 --os-neutron-ml2-type-drivers=vxlan,flat
+    ```
+    
+    ```sh
+    Làm tiếp theo hướng dẫn: https://www.rdoproject.org/networking/neutron-with-existing-external-network/
+    ```
+    
 
 ## Ghi chép khác
 - Setup IP cho Centos 7
