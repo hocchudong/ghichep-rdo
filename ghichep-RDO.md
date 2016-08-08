@@ -53,6 +53,8 @@
 
 ### Tùy chọn mặc định khi thực thi `packstack`
 
+- Tùy chọn với các giá trị mặc định: 
+
     ```sh
     packstack --allinone
     ```
