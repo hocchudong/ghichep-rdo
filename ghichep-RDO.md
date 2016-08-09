@@ -47,9 +47,15 @@
     sudo yum install -y openstack-packstack
     ```
 
+- Khởi động lại máy
+
+    ```sh
+    init 6
+    ```
+    
 ## Thực thi `packstack` để cài đặt OpenStack
 
-- Thực thi `packstack` để cài OpenStack. Có nhiều tùy chọn khi thực thi packstack, dưới là các tùy chọn.
+- Login với quyền root và lựa chọn một trong số cách thực thi sau
 
 ### Tùy chọn mặc định khi thực thi `packstack`
 
@@ -71,7 +77,14 @@
     Làm tiếp theo hướng dẫn: https://www.rdoproject.org/networking/neutron-with-existing-external-network/
     ```
     
+### Cài thêm node compute tiếp theo
 
+- Thực hiện giống các bước chuẩn bị như node CTL
+- Đứng từ máy đầu tiên (CTL), copy file answer sang máy thứ 2 (COM1)
+- Sửa dòng `CONFIG_COMPUTE_HOSTS` trong file answer thành IP của máy thứ 2 COM1
+
+
+    
 ## Ghi chép khác
 - Setup IP cho Centos 7
 
