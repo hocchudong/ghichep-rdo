@@ -2,6 +2,8 @@
 
 ## Bước chuẩn bị
 
+### Bước 1: Chuẩn bị
+
 - Môi trường cài đặt
 
     ```sh
@@ -21,6 +23,20 @@
     - eth0: Managment: 10.10.10.0/24 , no gateway
     - eth1: External:  172.16.69.0/24 , gateway 172.16.69.1
     ```
+    
+- Setup IP tĩnh cho máy cài đặt RDO
+
+    ```sh
+    echo "Setup IP  eth0"
+    nmcli c modify eth0 ipv4.addresses 10.10.10.30/24
+    nmcli c modify eth0 ipv4.method manual
+
+    echo "Setup IP  eth1"
+    nmcli c modify eth1 ipv4.addresses 172.16.69.30/24
+    nmcli c modify eth1 ipv4.gateway 172.16.69.1
+    nmcli c modify eth1 ipv4.dns 8.8.8.8
+    nmcli c modify eth1 ipv4.method manual
+    ```    
 
 - Cấu hình các gói cơ bản
 
@@ -33,13 +49,15 @@
     sudo systemctl start network
     ```
 
+### Bước 2: Khai báo repos
+
 - Khai báo repos cho OpenStack Mitaka và update
 
     ```sh
     sudo yum install -y centos-release-openstack-mitaka
     sudo yum update -y
     ```
-## Cài đặt công cụ `packstack`
+### Bước 3: Cài đặt công cụ `packstack`
 
 - Cài đặt công cụ packstack đóng gói cho RHEL, CentOS
 
@@ -57,25 +75,47 @@
 
 - Login với quyền root và lựa chọn một trong số cách thực thi sau
 
-### Tùy chọn mặc định khi thực thi `packstack`
+### Bước 4: Tùy chọn mặc định khi thực thi `packstack`
 
-- Tùy chọn với các giá trị mặc định: 
+### Bước 4.1: Cài đặt với các giá trị mặc định (Chọn 4.1 thì bỏ qua 4.2)
+
+- Tùy chọn 1: với các giá trị mặc định: 
 
     ```sh
     packstack --allinone
-    ```
+    ```  
+    
+### Bước 4.2: Cài đặt với network tùy chọn theo hệ thống của bạn (Chọn 4.2 thì bỏ qua 4.1)  
+  
+- Tùy chọn 2: 
+    
+    - Với dải mạng đã có sẵn (eth1 là card mạng để máy ảo giao tiếp với bên ngoài.)
 
+        ```sh
+        packstack --allinone --provision-demo=n --os-neutron-ovs-bridge-mappings=extnet:br-ex --os-neutron-ovs-bridge-interfaces=br-ex:eth1 --os-neutron-ml2-type-drivers=vxlan,flat
+        ```
+     
+    - Lúc này file ` /etc/sysconfig/network-scripts/ifcfg-br-ex` sẽ có nội dung như sau:
     
+        ```sh
+        ...
+        ```
     
-- Tùy chọn với dải mạng đã có sẵn
-
-    ```sh
-    packstack --allinone --provision-demo=n --os-neutron-ovs-bridge-mappings=extnet:br-ex --os-neutron-ovs-bridge-interfaces=br-ex:eth1 --os-neutron-ml2-type-drivers=vxlan,flat
-    ```
+    - Setup interface cho card bridge `/etc/sysconfig/network-scripts/ifcfg-eth0`
     
-    ```sh
-    Làm tiếp theo hướng dẫn: https://www.rdoproject.org/networking/neutron-with-existing-external-network/
-    ```
+        ```sh
+        DEVICE=eth1
+        TYPE=OVSPort
+        DEVICETYPE=ovs
+        OVS_BRIDGE=br-ex
+        ONBOOT=yes
+        ```
+    
+    - Tham khảo
+    
+        ```sh
+        https://www.rdoproject.org/networking/neutron-with-existing-external-network/
+        ```
     
 ### Cài thêm node compute tiếp theo
 
@@ -100,5 +140,16 @@
     nmcli c modify eth1 ipv4.method manual
     ```
 
-- 
+## Các chú ý với `packstack`
 
+- Generate answer file
+
+    ```sh
+    packstack --gen-answer-file
+    ```
+    
+- Reuse an answer file
+
+    ```sh
+    packstack --answer-file=/path/to/packstack_answers.txt
+    ```
