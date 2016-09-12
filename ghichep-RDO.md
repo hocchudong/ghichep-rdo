@@ -110,7 +110,37 @@
         OVS_BRIDGE=br-ex
         ONBOOT=yes
         ```
-    
+        
+- Tạo network 
+
+    ```sh
+    neutron net-create external_network --provider:network_type flat --provider:physical_network extnet  --router:external
+
+    neutron subnet-create --name public_subnet --enable_dhcp=False --allocation-pool=start=192.168.122.10,end=192.168.122.20 \
+                        --gateway=192.168.122.1 external_network 192.168.122.0/24
+    ```
+
+- Tạo router
+
+    ```sh
+    neutron router-create router1
+    neutron router-gateway-set router1 external_network
+    ```
+
+- Tạo private network
+
+    ```sh
+    neutron net-create private_network
+    neutron subnet-create --name private_subnet private_network 192.168.100.0/24
+    ```
+
+- Gán interface cho router 
+
+    ```sh
+    neutron router-interface-add router1 private_subnet
+    ```
+
+
     - Tham khảo
     
         ```sh
