@@ -170,7 +170,9 @@
     nmcli c modify eth1 ipv4.method manual
     ```
 
-## Các chú ý với `packstack`
+## Các chú ý khác 
+
+### Các lệnh trong `packstack`
 
 - Generate answer file
 
@@ -183,3 +185,13 @@
     ```sh
     packstack --answer-file=/path/to/packstack_answers.txt
     ```
+    
+### Các ghi chép với CentOS & RHEL
+
+- Đăng ký tài khoản dùng thử trong RHEL
+
+    ```sh
+    subscription-manager register --username maianhbao1@vietstack.vn --password c0ng@3010 --auto-attach
+    ```
+    
+-
