@@ -48,21 +48,35 @@
     sudo systemctl enable network
     sudo systemctl start network
     ```
+    
+- Vô hiệu hóa `SELINUX`
 
+    ```sh
+    sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+    ```
+    
+- Khởi động lại máy
+
+    ```sh
+    init 6
+    ```
+    
 ### Bước 2: Khai báo repos
 
+- Đăng nhập vào máy chủ với quyền `root` và thực hiện các bước dưới
 - Khai báo repos cho OpenStack Mitaka và update
 
     ```sh
     sudo yum install -y centos-release-openstack-mitaka
     sudo yum update -y
     ```
-### Bước 3: Cài đặt công cụ `packstack`
+### Bước 3: Cài đặt công cụ `packstack` và gói bổ trợ
 
 - Cài đặt công cụ packstack đóng gói cho RHEL, CentOS
 
     ```sh
-    sudo yum install -y openstack-packstack
+    sudo yum install -y wget 
+    sudo yum install -y openstack-packstack    
     ```
 
 - Khởi động lại máy
