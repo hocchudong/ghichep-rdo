@@ -2,17 +2,17 @@
 
 ### Mục lục
 
-[1. Cài đặt RDO trên 01 máy](#1)
+[I. Cài đặt RDO trên 01 máy](#1)
 
-[2. Cài đặt RDO đồng thời trên nhiều node](#2)
+[II. Cài đặt RDO đồng thời trên nhiều node](#2)
 
-[3. Ghi chép khác](#3)
+[III. Ghi chép khác](#3)
 
-[4. Các lệnh trong packstack](#4)
+[IV. Các lệnh trong packstack](#4)
 
 
 <a name="1"></a>
-## 1. Cài đặt RDO trên 01 máy
+## I. Cài đặt RDO trên 01 máy
 
 ### Bước 1: Chuẩn bị
 
@@ -180,7 +180,7 @@
 - Sửa dòng `CONFIG_COMPUTE_HOSTS` trong file answer thành IP của máy thứ 2 COM1
 
 <a name="2"></a>
-## 2. Cài đặt RDO đồng thời trên nhiều node
+## II. Cài đặt RDO đồng thời trên nhiều node
 
 - Giải sử có 03 node, bao gồm: `Controller` (CTL1), `Compute1` (COM1) và `Compute2` (COM2)
 
@@ -395,7 +395,7 @@ image-create --name='cirros image' \
 - Truy cập vào web để tạo máy ảo.
 
 <a name="3"></a>
-## 3. Ghi chép khác
+## III. Ghi chép khác
 - Setup IP cho Centos 7
 
     ```sh
@@ -423,7 +423,7 @@ image-create --name='cirros image' \
 
 
 <a name="4"></a
-## 4. Các lệnh trong `packstack`
+## IV. Các lệnh trong `packstack`
 
 - Generate answer file
 
