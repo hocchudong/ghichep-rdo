@@ -1,6 +1,18 @@
 # Các ghi chép khi cài đặt RDO - packstack
 
-## Bước chuẩn bị
+### Mục lục
+
+[1. Cài đặt RDO trên 01 máy](#1)
+
+[2. Cài đặt RDO đồng thời trên nhiều node](#2)
+
+[3. Ghi chép khác](#3)
+
+[4. Các lệnh trong packstack](#4)
+
+
+<a name="1"></a>
+## 1. Cài đặt RDO trên 01 máy
 
 ### Bước 1: Chuẩn bị
 
@@ -167,8 +179,167 @@
 - Đứng từ máy đầu tiên (CTL), copy file answer sang máy thứ 2 (COM1)
 - Sửa dòng `CONFIG_COMPUTE_HOSTS` trong file answer thành IP của máy thứ 2 COM1
 
+<a name="2"></a>
+## Cài đặt RDO đồng thời trên nhiều node
 
-    
+- Giải sử có 03 node, bao gồm: `Controller` (CTL1), `Compute1` (COM1) và `Compute2` (COM2)
+
+- Mỗi máy có 02 NICs (tên NIC có thể khác nhau, ví dụ eno16777728, eth0, em1...:
+ - eno16777728: 10.10.10.0/24
+ - eno33554952: 172.16.69.0/24 , gateway 172.16.69.1
+
+
+### Bước 1: Thiết lập IP và cài các gói bổ trợ trên các node
+
+#### Controller1
+
+- Thiết lập IP 
+
+    ```sh
+    echo "Setup IP  eno16777728"
+    nmcli c modify eno16777728 ipv4.addresses 10.10.10.30/24
+    nmcli c modify eno16777728 ipv4.method manual
+
+    echo "Setup IP  eno33554952"
+    nmcli c modify eno33554952 ipv4.addresses 172.16.69.30/24
+    nmcli c modify eno33554952 ipv4.gateway 172.16.69.1
+    nmcli c modify eno33554952 ipv4.dns 8.8.8.8
+    nmcli c modify eno33554952 ipv4.method manual
+
+
+    sudo systemctl disable firewalld
+    sudo systemctl stop firewalld
+    sudo systemctl disable NetworkManager
+    sudo systemctl disable NetworkManager
+    sudo systemctl enable network
+    sudo systemctl start network
+
+    sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+    init 6
+    ```
+
+- Khai báo các gói để cài đặt OpenStack
+
+    ```sh
+    sudo yum install -y https://rdoproject.org/repos/rdo-release.rpm
+
+    yum update -y
+
+    sudo yum install -y wget 
+    yum install -y openstack-packstack
+
+    init 6
+    ```
+
+#### Trên Compute1
+
+- Thiết lập IP 
+
+    ```sh
+    echo "Setup IP  eno16777728"
+    nmcli c modify eno16777728 ipv4.addresses 10.10.10.31/24
+    nmcli c modify eno16777728 ipv4.method manual
+
+    echo "Setup IP  eno33554952"
+    nmcli c modify eno33554952 ipv4.addresses 172.16.69.31/24
+    nmcli c modify eno33554952 ipv4.gateway 172.16.69.1
+    nmcli c modify eno33554952 ipv4.dns 8.8.8.8
+    nmcli c modify eno33554952 ipv4.method manual
+
+
+    sudo systemctl disable firewalld
+    sudo systemctl stop firewalld
+    sudo systemctl disable NetworkManager
+    sudo systemctl disable NetworkManager
+    sudo systemctl enable network
+    sudo systemctl start network
+
+    sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+    init 6
+    ```
+
+- Khai báo các gói để cài đặt OpenStack
+
+    ```sh
+    sudo yum install -y https://rdoproject.org/repos/rdo-release.rpm
+
+    yum update -y
+
+    sudo yum install -y wget 
+    yum install -y openstack-packstack
+
+    init 6
+    ```
+
+#### Trên Compute2
+
+- Thiết lập IP 
+
+    ```sh
+    echo "Setup IP  eno16777728"
+    nmcli c modify eno16777728 ipv4.addresses 10.10.10.32/24
+    nmcli c modify eno16777728 ipv4.method manual
+
+    echo "Setup IP  eno33554952"
+    nmcli c modify eno33554952 ipv4.addresses 172.16.69.32/24
+    nmcli c modify eno33554952 ipv4.gateway 172.16.69.1
+    nmcli c modify eno33554952 ipv4.dns 8.8.8.8
+    nmcli c modify eno33554952 ipv4.method manual
+
+
+    sudo systemctl disable firewalld
+    sudo systemctl stop firewalld
+    sudo systemctl disable NetworkManager
+    sudo systemctl disable NetworkManager
+    sudo systemctl enable network
+    sudo systemctl start network
+
+    sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+    init 6
+    ```
+
+- Khai báo các gói để cài đặt OpenStack
+
+    ```sh
+    sudo yum install -y https://rdoproject.org/repos/rdo-release.rpm
+
+    yum update -y
+
+    sudo yum install -y wget 
+    yum install -y openstack-packstack
+
+    init 6
+    ```
+
+### Thực hiện cài RDO
+- Sử dụng lệnh dưới để cài OpenStack.
+- Khi cài, màn hình sẽ yêu cầu nhập mật khẩu của các máy COM1 và COM2, packstack sẽ tự động cài trên các máy này mà ko cần thao tác.
+
+    ```sh
+    packstack --allinone \
+        --os-cinder-install=n \
+        --os-ceilometer-install=n \
+        --os-trove-install=n \
+        --os-ironic-install=n \
+        --nagios-install=n \
+        --os-swift-install=n \
+        --os-gnocchi-install=n \
+        --os-aodh-install=n \
+        --os-neutron-ovs-bridge-mappings=extnet:br-ex \
+        --os-neutron-ovs-bridge-interfaces=br-ex:eno33554952 \
+        --os-neutron-ml2-type-drivers=vxlan,flat \
+        --os-compute-hosts=172.16.69.31,172.16.69.32 \
+        --os-neutron-ovs-tunnel-if=eno16777728 \
+        --provision-demo=n
+
+     ```
+
+- Kết thúc quá trình cài, màn hình sẽ có thông báo để sử dụng OpenStack
+
+<a name="3"></a>
 ## Ghi chép khác
 - Setup IP cho Centos 7
 
@@ -184,9 +355,19 @@
     nmcli c modify eth1 ipv4.method manual
     ```
 
-## Các chú ý khác 
+  
+### Các ghi chép với CentOS & RHEL
 
-### Các lệnh trong `packstack`
+- Đăng ký tài khoản dùng thử trong RHEL
+
+    ```sh
+    subscription-manager register --username maianhbao1@vietstack.vn --password c0ng@3010 --auto-attach
+    ```
+    
+
+
+<a name="4"></a
+## Các lệnh trong `packstack`
 
 - Generate answer file
 
@@ -199,13 +380,3 @@
     ```sh
     packstack --answer-file=/path/to/packstack_answers.txt
     ```
-    
-### Các ghi chép với CentOS & RHEL
-
-- Đăng ký tài khoản dùng thử trong RHEL
-
-    ```sh
-    subscription-manager register --username maianhbao1@vietstack.vn --password c0ng@3010 --auto-attach
-    ```
-    
--
