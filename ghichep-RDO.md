@@ -180,7 +180,7 @@
 - Sửa dòng `CONFIG_COMPUTE_HOSTS` trong file answer thành IP của máy thứ 2 COM1
 
 <a name="2"></a>
-## Cài đặt RDO đồng thời trên nhiều node
+## 2. Cài đặt RDO đồng thời trên nhiều node
 
 - Giải sử có 03 node, bao gồm: `Controller` (CTL1), `Compute1` (COM1) và `Compute2` (COM2)
 
@@ -315,6 +315,7 @@
     ```
 
 ### Thực hiện cài RDO
+- SSH vào máy chủ Controller
 - Sử dụng lệnh dưới để cài OpenStack.
 - Khi cài, màn hình sẽ yêu cầu nhập mật khẩu của các máy COM1 và COM2, packstack sẽ tự động cài trên các máy này mà ko cần thao tác.
 
@@ -339,8 +340,62 @@
 
 - Kết thúc quá trình cài, màn hình sẽ có thông báo để sử dụng OpenStack
 
+### Upload image, tạo network, router , máy ảo
+
+- Thực thi biến môi trường
+
+    ```sh
+    source ~/keystonerc_admin
+    ```
+
+- Upload images
+
+```sh
+curl http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img | glance \
+image-create --name='cirros image' \
+--visibility=public \
+--container-format=bare \
+--disk-format=qcow2
+```
+
+- Tạo network public 
+
+    ```sh
+    neutron net-create external_network --provider:network_type flat \
+    --provider:physical_network extnet  \
+    --router:external \
+    --shared
+    ```
+
+- Tạo subnet trong network public 
+
+    ```sh
+    neutron subnet-create --name public_subnet \
+    --enable_dhcp=False \
+    --allocation-pool=start=172.16.69.80,end=172.16.69.100 \
+    --gateway=172.16.69.1 external_network 172.16.69.0/24
+    ```
+
+- Tạo network private
+
+    ```sh
+    neutron net-create private_network
+    neutron subnet-create --name private_subnet private_network 10.0.0.0/24 \
+    --dns-nameserver 8.8.8.8
+    ```
+
+- Tạo router và addd các interface
+
+    ```sh
+    neutron router-create router
+    neutron router-gateway-set router external_network
+    neutron router-interface-add router private_subnet
+    ```
+
+- Truy cập vào web để tạo máy ảo.
+
 <a name="3"></a>
-## Ghi chép khác
+## 3. Ghi chép khác
 - Setup IP cho Centos 7
 
     ```sh
@@ -355,6 +410,7 @@
     nmcli c modify eth1 ipv4.method manual
     ```
 
+
   
 ### Các ghi chép với CentOS & RHEL
 
@@ -367,7 +423,7 @@
 
 
 <a name="4"></a
-## Các lệnh trong `packstack`
+## 4. Các lệnh trong `packstack`
 
 - Generate answer file
 
