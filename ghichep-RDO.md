@@ -321,7 +321,8 @@
 
     ```sh
     packstack --allinone \
-        --os-cinder-install=n \
+        --default-password=Welcome123 \
+        --os-cinder-install=y \
         --os-ceilometer-install=n \
         --os-trove-install=n \
         --os-ironic-install=n \
@@ -332,10 +333,10 @@
         --os-neutron-ovs-bridge-mappings=extnet:br-ex \
         --os-neutron-ovs-bridge-interfaces=br-ex:eno33554952 \
         --os-neutron-ml2-type-drivers=vxlan,flat \
+        --os-controller-host=172.16.69.30 \
         --os-compute-hosts=172.16.69.31,172.16.69.32 \
         --os-neutron-ovs-tunnel-if=eno16777728 \
         --provision-demo=n
-
      ```
 
 - Kết thúc quá trình cài, màn hình sẽ có thông báo để sử dụng OpenStack
@@ -352,7 +353,7 @@
 
 ```sh
 curl http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img | glance \
-image-create --name='cirros image' \
+image-create --name='cirros' \
 --visibility=public \
 --container-format=bare \
 --disk-format=qcow2
