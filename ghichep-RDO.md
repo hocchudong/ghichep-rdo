@@ -347,6 +347,9 @@
 - Sử dụng lệnh dưới để cài OpenStack.
 - Khi cài, màn hình sẽ yêu cầu nhập mật khẩu của các máy COM1 và COM2, packstack sẽ tự động cài trên các máy này mà ko cần thao tác.
 
+- Có 02 lựa chọn sau: 
+ - Lựa chọn 1: Cài đặt với mô hình Self service network
+
     ```sh
     packstack --allinone \
         --default-password=Welcome123 \
@@ -366,6 +369,30 @@
         --os-neutron-ovs-tunnel-if=eno16777728 \
         --provision-demo=n
      ```
+ - Lựa chọn 2: Cài đặt với mô hình Provider network và self service network
+
+    ```sh
+    packstack --allinone \
+        --default-password=Welcome123 \
+        --os-cinder-install=y \
+        --os-ceilometer-install=n \
+        --os-trove-install=n \
+        --os-ironic-install=n \
+        --nagios-install=n \
+        --os-swift-install=n \
+        --os-gnocchi-install=n \
+        --os-aodh-install=n \
+        --os-neutron-ovs-bridge-mappings=extnet:br-ex \
+        --os-neutron-ovs-bridge-interfaces=br-ex:eno33554952 \
+        --os-neutron-ovs-bridges-compute=br-ex \
+        --os-neutron-ml2-type-drivers=vxlan,flat \
+        --os-controller-host=172.16.69.30 \
+        --os-compute-hosts=172.16.69.31,172.16.69.32 \
+        --os-neutron-ovs-tunnel-if=eno16777728 \
+        --provision-demo=n
+     ```
+
+ - Trong lệnh packstack trên đã dùng tùy chọn để tạo ra mô hình sử dụng cả provider và selfservice đó là  `--os-neutron-ovs-bridges-compute=br-ex`
 
 - Kết thúc quá trình cài, màn hình sẽ có thông báo để sử dụng OpenStack
 
