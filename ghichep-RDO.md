@@ -226,7 +226,7 @@
 
     yum update -y
 
-    sudo yum install -y wget 
+    sudo yum install -y wget crudini
     yum install -y openstack-packstack
 
     init 6
@@ -267,7 +267,7 @@
 
     yum update -y
 
-    sudo yum install -y wget 
+    sudo yum install -y wget crudini
     yum install -y openstack-packstack
 
     init 6
@@ -301,18 +301,46 @@
     init 6
     ```
 
-- Khai báo các gói để cài đặt OpenStack
+- Cách 1: Khai báo các gói để cài đặt OpenStack stables mới nhất (Hiện tại là newton)
 
     ```sh
     sudo yum install -y https://rdoproject.org/repos/rdo-release.rpm
 
     yum update -y
 
-    sudo yum install -y wget 
+    sudo yum install -y wget crudini
     yum install -y openstack-packstack
 
     init 6
     ```
+
+- Cách 2: Khai báo các gói để cài đặt OpenStack mới nhất đang phát triển (vào thời điểm này là Ocacta)
+
+    ```sh
+    sudo yum install -y wget crudini
+
+    cd /etc/yum.repos.d/
+    wget http://trunk.rdoproject.org/centos7/delorean-deps.repo
+    wget https://trunk.rdoproject.org/centos7-master/current/delorean.repo
+
+    cd /root/
+    yum install -y openstack-packstack 
+
+    init 6
+    ```
+
+- Cách 3: Khai báo các gói để cài đặt OpenStack chỉ định, giả sử bản OpenStack Mitaka
+
+    ```sh
+    sudo yum install -y centos-release-openstack-mitaka
+    sudo yum update -y
+
+    sudo yum install -y wget crudini
+    yum install -y openstack-packstack
+
+    init 6
+    ```
+
 
 ### Thực hiện cài RDO
 - SSH vào máy chủ Controller
