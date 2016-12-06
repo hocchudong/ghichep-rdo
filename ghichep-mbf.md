@@ -3,7 +3,7 @@
 ### IP planning 
 - Đảm bảo đúng thứ tự các NICs
 
-![ipplanning](http://image.prntscr.com/image/565e1701d0924306a3aed433e3b0b6d0.png)
+![ipplanning](http://image.prntscr.com/image/ff290369f07b4197bd7d48c9188f71a0.png)
 
 ### Các bước thiết lập IP, tải gói cần tiết
 
@@ -16,11 +16,11 @@ echo "Setup IP  eno50"
 nmcli c modify eno50 ipv4.addresses 10.16.39.150/24
 nmcli c modify eno50 ipv4.method manual
 
-echo "Setup IP  team1"
-nmcli c modify team1 ipv4.addresses 10.16.149.13/24
-nmcli c modify team1 ipv4.gateway 10.16.149.1
-nmcli c modify team1 ipv4.dns 8.8.8.8
-nmcli c modify team1 ipv4.method manual
+echo "Setup IP  eno56"
+nmcli c modify eno56 ipv4.addresses 10.16.149.13/24
+nmcli c modify eno56 ipv4.gateway 10.16.149.1
+nmcli c modify eno56 ipv4.dns 8.8.8.8
+nmcli c modify eno56 ipv4.method manual
 ```
 
 - Cấu hình các dịch vụ cơ bản
@@ -73,11 +73,11 @@ echo "Setup IP  eno50"
 nmcli c modify eno50 ipv4.addresses 10.16.39.151/24
 nmcli c modify eno50 ipv4.method manual
 
-echo "Setup IP  team1"
-nmcli c modify team1 ipv4.addresses 10.16.149.12/24
-nmcli c modify team1 ipv4.gateway 10.16.149.1
-nmcli c modify team1 ipv4.dns 8.8.8.8
-nmcli c modify team1 ipv4.method manual
+echo "Setup IP  eno56"
+nmcli c modify eno56 ipv4.addresses 10.16.149.12/24
+nmcli c modify eno56 ipv4.gateway 10.16.149.1
+nmcli c modify eno56 ipv4.dns 8.8.8.8
+nmcli c modify eno56 ipv4.method manual
 ```
 
 - Cấu hình các dịch vụ cơ bản
@@ -124,6 +124,9 @@ init 6
 - Thực hiện lệnh dưới để cài trên controller, lệnh này sẽ tự động cài trên compute
 - Lưu ý nhập đúng IP của các máy controller và compute
 - Nếu có nhiều hơn 1 máy compute thì sử dụng dấu phẩy và các ip tiếp theo, ví dụ `--os-compute-hosts=10.16.149.12,10.16.149.14 ` 
+- Lưu ý:
+ - `eno56` : Được dùng để mapping openvswitch và card mạng vật lý của các máy chủ controller và compute
+ - `eno50`: Được dùng để truyền thông giữu các máy ảo với nhau.
 
 ```sh
 packstack --allinone \
@@ -137,7 +140,7 @@ packstack --allinone \
     --os-gnocchi-install=n \
     --os-aodh-install=n \
     --os-neutron-ovs-bridge-mappings=extnet:br-ex \
-    --os-neutron-ovs-bridge-interfaces=br-ex:team1 \
+    --os-neutron-ovs-bridge-interfaces=br-ex:eno56 \
     --os-neutron-ovs-bridges-compute=br-ex \
     --os-neutron-ml2-type-drivers=vxlan,flat \
     --os-controller-host=10.16.149.13 \
