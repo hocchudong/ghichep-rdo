@@ -1,30 +1,9 @@
 ## Chuẩn bị mô hình
 
-### Máy controller 
+### IP planning 
+- Đảm bảo đúng thứ tự các NICs
 
-- NIC1:
- - Name: `team1`
- - IP address: `10.16.149.13`
- - Netmask: `255.255.255.0`
- - Gateway: `10.16.149.1`
-
-- NIC2: 
- - Name: `en050`
- - IP address: `10.16.39.151`
- - Netmask: `255.255.255.0`
-
-### Máy compute
-
-- NIC1:
- - Name: `team1`
- - IP address: `10.16.149.12`
- - Netmask: `255.255.255.0` 
- - Gateway: `10.16.149.1`
-
-- NIC2: 
- - Name: `en050`
- - IP address: `10.16.39.150`
- - Netmask: 255.255.255.0
+![ipplanning](http://image.prntscr.com/image/565e1701d0924306a3aed433e3b0b6d0.png)
 
 ### Các bước thiết lập IP, tải gói cần tiết
 
