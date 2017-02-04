@@ -243,26 +243,23 @@
 - Khai báo các gói để cài đặt OpenStack
 
     ```sh
-    sudo yum install -y https://rdoproject.org/repos/rdo-release.rpm
-
+    sudo yum install -y centos-release-openstack-newton
     yum update -y
 
     sudo yum install -y wget crudini
     yum install -y openstack-packstack
-
     init 6
     ```
 - Cách 1: Khai báo các gói để cài đặt OpenStack stables mới nhất (Hiện tại là newton)
 
     ```sh
-    sudo yum install -y https://rdoproject.org/repos/rdo-release.rpm
-
+    sudo yum install -y centos-release-openstack-newton
     yum update -y
 
     sudo yum install -y wget crudini
     yum install -y openstack-packstack
-
     init 6
+    ```
     ```
 
 - Cách 2: Khai báo các gói để cài đặt OpenStack mới nhất đang phát triển (vào thời điểm này là Ocacta)
@@ -323,13 +320,11 @@
 - Cách 1: Khai báo các gói để cài đặt OpenStack stables mới nhất (Hiện tại là newton)
 
     ```sh
-    sudo yum install -y https://rdoproject.org/repos/rdo-release.rpm
-
+    sudo yum install -y centos-release-openstack-newton
     yum update -y
 
     sudo yum install -y wget crudini
     yum install -y openstack-packstack
-
     init 6
     ```
 
@@ -391,14 +386,13 @@
 
 - Cách 1: Khai báo các gói để cài đặt OpenStack stables mới nhất (Hiện tại là newton)
 
-    ```sh
-    sudo yum install -y https://rdoproject.org/repos/rdo-release.rpm
 
+    ```sh
+    sudo yum install -y centos-release-openstack-newton
     yum update -y
 
     sudo yum install -y wget crudini
     yum install -y openstack-packstack
-
     init 6
     ```
 
