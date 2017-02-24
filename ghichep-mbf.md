@@ -160,10 +160,10 @@ Bước tạo network, máy ảo.
 
 #### Chuẩn bị trên controller
 
- - Cài đặt IP và thiết lập mạng
+- Cài đặt IP và thiết lập mạng
 
- ```sh
- echo "Setup IP  eno49"
+```sh
+echo "Setup IP  eno49"
 nmcli c modify eno49 ipv4.addresses 10.3.11.20/24
 nmcli c modify eno49 ipv4.method manual
 
@@ -184,8 +184,6 @@ sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 sed -i 's/notify_only=1/notify_only=0/g' /etc/yum/pluginconf.d/search-disabled-repos.conf
 ````
 
-
-
 - Đăng nhập vào controller và cài đặt repos cho Mitaka.
 
 ```sh
@@ -203,7 +201,7 @@ yum install -y openstack-packstack
 init 6
 ```
 
- ##### Chuẩn bị trên Compute
+##### Chuẩn bị trên Compute
 
  - Cài đặt IP và thiết lập mạng
 
