@@ -490,7 +490,6 @@
         --os-swift-install=n \
         --os-gnocchi-install=n \
         --os-aodh-install=n \
-        --os-horizon-ssl=y \
         --os-neutron-ovs-bridge-mappings=extnet:br-ex \
         --os-neutron-ovs-bridge-interfaces=br-ex:eno33554952 \
         --os-neutron-ml2-type-drivers=vxlan,flat \
