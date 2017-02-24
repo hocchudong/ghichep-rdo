@@ -156,31 +156,9 @@ Bước tạo network, máy ảo.
 
 #### IP range các máy
 
-##### Controller
+![ipplanning](http://image.prntscr.com/image/93634d82a10640aea69fe7cc777246a6.png)
 
-- eno49: 
- - IP: 10.3.11.20
- - Subnetmask: /24
- - Gateway: 10.3.11.99
-
-- eno53: 
- - IP: 10.3.10.37
- - Subnetmask: /24
- - Gateway: 10.3.10.99
-
-##### Compute 
-
-- eno49: 
- - IP: 10.3.11.21
- - Subnetmask: /24
- - Gateway: 10.3.11.99
-
-- eno53: 
- - IP: 10.3.10.38
- - Subnetmask: /24
- - Gateway: 10.3.10.99
-
- #### Chuẩn bị trên controller
+#### Chuẩn bị trên controller
 
  - Cài đặt IP và thiết lập mạng
 
