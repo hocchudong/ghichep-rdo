@@ -299,9 +299,9 @@ hostnamectl set-hostname controller
 
 - Thiết lập hostname
 
-```sh
-hostnamectl set-hostname compute1
-```
+    ```sh
+    hostnamectl set-hostname compute1
+    ```
 
 - Thiết lập IP 
 
@@ -325,8 +325,6 @@ hostnamectl set-hostname compute1
     sudo systemctl start network
 
     sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
-
-    init 6
     ```
 
 - Cách 1: Khai báo các gói để cài đặt OpenStack stables mới nhất (Hiện tại là newton)
@@ -352,7 +350,6 @@ hostnamectl set-hostname compute1
     cd /root/
     yum install -y openstack-packstack 
 
-    init 6
     ```
 
 - Cách 3: Khai báo các gói để cài đặt OpenStack chỉ định, giả sử bản OpenStack Mitaka
@@ -369,6 +366,12 @@ hostnamectl set-hostname compute1
 
 
 #### Trên Compute2
+
+- Thiết lập hostname
+
+    ```sh
+    hostnamectl set-hostname compute2
+    ```
 
 - Thiết lập IP 
 
@@ -393,7 +396,6 @@ hostnamectl set-hostname compute1
 
     sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 
-    init 6
     ```
 
 - Cách 1: Khai báo các gói để cài đặt OpenStack stables mới nhất (Hiện tại là newton)
