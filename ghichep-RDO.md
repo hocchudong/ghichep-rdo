@@ -214,6 +214,12 @@
 
 #### Controller1
 
+- Thiết lập hostname
+
+```sh
+hostnamectl set-hostname controller
+```
+
 - Thiết lập IP 
 
     ```sh
@@ -290,6 +296,12 @@
     ```
 
 #### Trên Compute1
+
+- Thiết lập hostname
+
+```sh
+hostnamectl set-hostname compute1
+```
 
 - Thiết lập IP 
 
