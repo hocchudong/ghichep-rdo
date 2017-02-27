@@ -216,9 +216,9 @@
 
 - Thiết lập hostname
 
-```sh
-hostnamectl set-hostname controller
-```
+    ```sh
+    hostnamectl set-hostname controller
+    ```
 
 - Thiết lập IP 
 
@@ -265,7 +265,6 @@ hostnamectl set-hostname controller
     sudo yum install -y wget crudini
     yum install -y openstack-packstack
     init 6
-    ```
     ```
 
 - Cách 2: Khai báo các gói để cài đặt OpenStack mới nhất đang phát triển (vào thời điểm này là Ocacta)
