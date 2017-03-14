@@ -21,6 +21,7 @@
 	```
 
 	- Kết quả sẽ hiện thị như dưới, trong đó chứa dòng `description:    Ethernet Channel Bonding Driver, v3.7.1`
+
 		```sh
 		[root@rhel7-srv2 network-scripts]# modinfo bonding
 		filename:       /lib/modules/3.10.0-327.el7.x86_64/kernel/drivers/net/bonding/bonding.ko
@@ -85,7 +86,7 @@
 		cp /etc/sysconfig/network-scripts/ifcfg-eno16777728 /etc/sysconfig/network-scripts/ifcfg-eno16777728.orig
 		```
 
-	- Sửa dòng với giá trị mới và thêm các dòng nếu thiếu trong file `/etc/sysconfig/network-scripts/ifcfg-eno16777728`
+	- Sửa dòng với giá trị mới nếu đã có dòng đó và thêm các dòng nếu thiếu trong file `/etc/sysconfig/network-scripts/ifcfg-eno16777728`
 		```sh
 		BOOTPROTO=none
 		ONBOOT=yes
@@ -93,12 +94,12 @@
 		SLAVE=yes
 		```
 
-	- Sao lưu file cấu hình của interface `eno16777728`
+	- Sao lưu file cấu hình của interface `eno33554952`
 		```sh
-		cp /etc/sysconfig/network-scripts/ifcfg-eno16777728 /etc/sysconfig/network-scripts/ifcfg-eno16777728.orig
+		cp /etc/sysconfig/network-scripts/ifcfg-eno33554952 /etc/sysconfig/network-scripts/ifcfg-eno33554952.orig
 		```
 
-	- Sửa dòng với giá trị mới và thêm các dòng nếu thiếu trong file `/etc/sysconfig/network-scripts/ifcfg-eno16777728`
+	- Sửa dòng với giá trị mới nếu đã có dòng đó và thêm các dòng nếu thiếu trong file `/etc/sysconfig/network-scripts/ifcfg-eno33554952`
 		```sh
 		BOOTPROTO=none
 		ONBOOT=yes
@@ -138,7 +139,7 @@
 		cp /etc/sysconfig/network-scripts/ifcfg-eno50332192 /etc/sysconfig/network-scripts/ifcfg-eno50332192.orig
 		```
 
-	- Sửa dòng với giá trị mới và thêm các dòng nếu thiếu trong file `/etc/sysconfig/network-scripts/ifcfg-eno50332192`
+	- Sửa dòng với giá trị mới nếu đã có dòng đó và thêm các dòng nếu thiếu trong file `/etc/sysconfig/network-scripts/ifcfg-eno50332192`
 		```sh
 		BOOTPROTO=none
 		ONBOOT=yes
@@ -151,7 +152,7 @@
 		cp /etc/sysconfig/network-scripts/ifcfg-eno67109416 /etc/sysconfig/network-scripts/ifcfg-eno67109416.orig
 		```
 
-	- Sửa dòng với giá trị mới và thêm các dòng nếu thiếu trong file `/etc/sysconfig/network-scripts/ifcfg-eno67109416`
+	- Sửa dòng với giá trị mới nếu đã có dòng đó và thêm các dòng nếu thiếu trong file `/etc/sysconfig/network-scripts/ifcfg-eno67109416`, các dòng khác giữu nguyên
 		```sh
 		BOOTPROTO=none
 		ONBOOT=yes
