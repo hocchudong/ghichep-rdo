@@ -614,6 +614,7 @@ image-create --name='cirros' \
 
 <a name="3"></a>
 ## III. Ghi chép khác
+
 - Setup IP cho Centos 7
 
     ```sh
@@ -633,6 +634,9 @@ image-create --name='cirros' \
 ```sh
 https://thaiopen.github.io/sipacloudcourse/packstack.html#install-openstack-puppet-module
 ```
+
+#### Cấu hình Network cho RHEL
+
 
   
 ### Các ghi chép với CentOS & RHEL
