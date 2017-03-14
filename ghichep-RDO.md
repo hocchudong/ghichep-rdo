@@ -246,26 +246,29 @@
     init 6
     ```
 
-- Khai báo các gói để cài đặt OpenStack
-
-    ```sh
-    sudo yum install -y centos-release-openstack-newton
-    yum update -y
-
-    sudo yum install -y wget crudini
-    yum install -y openstack-packstack
-    init 6
-    ```
 - Cách 1: Khai báo các gói để cài đặt OpenStack stables mới nhất (Hiện tại là newton)
 
-    ```sh
-    sudo yum install -y centos-release-openstack-newton
-    yum update -y
+    - Đối với CENTOS
+        ```sh
+        sudo yum install -y centos-release-openstack-newton
+        yum -y update
+        yum -y upgrade
 
-    sudo yum install -y wget crudini
-    yum install -y openstack-packstack
-    init 6
-    ```
+        sudo yum install -y wget crudini
+        yum install -y openstack-packstack
+        init 6
+        ```
+
+    - Đối với RHEL 7.x
+        ```sh
+        yum install https://repos.fedorapeople.org/repos/openstack/openstack-newton/rdo-release-newton-4.noarch.rpm
+        yum -y update
+        yum -y upgrade
+
+         yum install -y wget crudini
+        yum install -y openstack-packstack
+        init 6
+        ```
 
 - Cách 2: Khai báo các gói để cài đặt OpenStack mới nhất đang phát triển (vào thời điểm này là Ocacta)
 
@@ -284,15 +287,29 @@
 
 - Cách 3: Khai báo các gói để cài đặt OpenStack chỉ định, giả sử bản OpenStack Mitaka
 
-    ```sh
-    sudo yum install -y centos-release-openstack-mitaka
-    sudo yum update -y
+    - Trên CENTOS 7.x:
+        ```sh
+        yum install -y centos-release-openstack-mitaka
+        yum -y update
+        yum -y upgrade
 
-    sudo yum install -y wget crudini
-    yum install -y openstack-packstack
+        yum install -y wget crudini
+        yum install -y openstack-packstack
 
-    init 6
-    ```
+        init 6
+        ```
+
+    - Trên RHEL 7.x: 
+        ```sh
+        yum install https://repos.fedorapeople.org/repos/openstack/openstack-mitaka/rdo-release-mitaka-6.noarch.rpm
+        yum -y update
+        yum -y upgrade
+
+         yum install -y wget crudini
+        yum install -y openstack-packstack
+        init 6
+        ```
+
 
 #### Trên Compute1
 
@@ -328,14 +345,27 @@
 
 - Cách 1: Khai báo các gói để cài đặt OpenStack stables mới nhất (Hiện tại là newton)
 
-    ```sh
-    sudo yum install -y centos-release-openstack-newton
-    yum update -y
+    - Đối với CENTOS
+        ```sh
+        sudo yum install -y centos-release-openstack-newton
+        yum -y update
+        yum -y upgrade
 
-    sudo yum install -y wget crudini
-    yum install -y openstack-packstack
-    init 6
-    ```
+        sudo yum install -y wget crudini
+        yum install -y openstack-packstack
+        init 6
+        ```
+
+    - Đối với RHEL 7.x
+        ```sh
+        yum install https://repos.fedorapeople.org/repos/openstack/openstack-newton/rdo-release-newton-4.noarch.rpm
+        yum -y update
+        yum -y upgrade
+
+         yum install -y wget crudini
+        yum install -y openstack-packstack
+        init 6
+        ```
 
 - Cách 2: Khai báo các gói để cài đặt OpenStack mới nhất đang phát triển (vào thời điểm này là Ocacta)
 
@@ -353,16 +383,28 @@
 
 - Cách 3: Khai báo các gói để cài đặt OpenStack chỉ định, giả sử bản OpenStack Mitaka
 
-    ```sh
-    sudo yum install -y centos-release-openstack-mitaka
-    sudo yum update -y
+    - Trên CENTOS 7.x:
+        ```sh
+        yum install -y centos-release-openstack-mitaka
+        yum -y update
+        yum -y upgrade
 
-    sudo yum install -y wget crudini
-    yum install -y openstack-packstack
+        yum install -y wget crudini
+        yum install -y openstack-packstack
 
-    init 6
-    ```
+        init 6
+        ```
 
+    - Trên RHEL 7.x: 
+        ```sh
+        yum install https://repos.fedorapeople.org/repos/openstack/openstack-mitaka/rdo-release-mitaka-6.noarch.rpm
+        yum -y update
+        yum -y upgrade
+
+         yum install -y wget crudini
+        yum install -y openstack-packstack
+        init 6
+        ```
 
 #### Trên Compute2
 
@@ -399,15 +441,27 @@
 
 - Cách 1: Khai báo các gói để cài đặt OpenStack stables mới nhất (Hiện tại là newton)
 
+    - Đối với CENTOS
+        ```sh
+        sudo yum install -y centos-release-openstack-newton
+        yum -y update
+        yum -y upgrade
 
-    ```sh
-    sudo yum install -y centos-release-openstack-newton
-    yum update -y
+        sudo yum install -y wget crudini
+        yum install -y openstack-packstack
+        init 6
+        ```
 
-    sudo yum install -y wget crudini
-    yum install -y openstack-packstack
-    init 6
-    ```
+    - Đối với RHEL 7.x
+        ```sh
+        yum install https://repos.fedorapeople.org/repos/openstack/openstack-newton/rdo-release-newton-4.noarch.rpm
+        yum -y update
+        yum -y upgrade
+
+         yum install -y wget crudini
+        yum install -y openstack-packstack
+        init 6
+        ```
 
 - Cách 2: Khai báo các gói để cài đặt OpenStack mới nhất đang phát triển (vào thời điểm này là Ocacta)
 
@@ -426,15 +480,28 @@
 
 - Cách 3: Khai báo các gói để cài đặt OpenStack chỉ định, giả sử bản OpenStack Mitaka
 
-    ```sh
-    sudo yum install -y centos-release-openstack-mitaka
-    sudo yum update -y
+    - Trên CENTOS 7.x:
+        ```sh
+        yum install -y centos-release-openstack-mitaka
+        yum -y update
+        yum -y upgrade
 
-    sudo yum install -y wget crudini
-    yum install -y openstack-packstack
+        yum install -y wget crudini
+        yum install -y openstack-packstack
 
-    init 6
-    ```
+        init 6
+        ```
+
+    - Trên RHEL 7.x: 
+        ```sh
+        yum install https://repos.fedorapeople.org/repos/openstack/openstack-mitaka/rdo-release-mitaka-6.noarch.rpm
+        yum -y update
+        yum -y upgrade
+
+         yum install -y wget crudini
+        yum install -y openstack-packstack
+        init 6
+        ```
 
 
 ### Thực hiện cài RDO
