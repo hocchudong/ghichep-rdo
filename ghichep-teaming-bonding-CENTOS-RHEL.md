@@ -11,10 +11,11 @@
 
 ### Các bước cấu hình
 
-- Thực hiện lệnh dưới để nạp chế độ bonding cho OS
+- Thực hiện lệnh dưới để nạp chế độ bonding cho OS trên tất cả các máy cần cấu hình
 	```sh
 	modprobe bonding
 	```
+
 - Kiểm tra lại xem mode bonding đã được nạp hay chưa
 	```sh
 	modinfo bonding
@@ -169,9 +170,45 @@
 	- Kiểm tra lại địa chỉ IP `ip a` ta sẽ thấy `bond1` có địa chỉ IP, các card còn lại sau khi bond sẽ ko có.
 
 
-Kết quả cuối cùng ta có 02 bond
+- Kết quả cuối cùng ta có 02 bond, để kiểm tra trạng thái bonding ta sử dụng lệnh `cat /proc/net/bonding/bond0`. Kết quả như dưới:
 
+	```sh
+	[root@rhel7-srv2 ~]# cat /proc/net/bonding/bond0
+	Ethernet Channel Bonding Driver: v3.7.1 (April 27, 2011)
+
+	Bonding Mode: transmit load balancing
+	Primary Slave: None
+	Currently Active Slave: eno33554952
+	MII Status: up
+	MII Polling Interval (ms): 100
+	Up Delay (ms): 0
+	Down Delay (ms): 0
+
+	Slave Interface: eno16777728
+	MII Status: up
+	Speed: 1000 Mbps
+	Duplex: full
+	Link Failure Count: 1
+	Permanent HW addr: 00:0c:29:52:d8:e4
+	Slave queue ID: 0
+
+	Slave Interface: eno33554952
+	MII Status: up
+	Speed: 1000 Mbps
+	Duplex: full
+	Link Failure Count: 0
+	Permanent HW addr: 00:0c:29:52:d8:ee
+	Slave queue ID: 0
+	```
+
+### Sử dụng các lệnh sau để test các mode của bonding
+
+- Sử dụng lệnh watch với netstat, sau đó đứng từ một máy khác ping đến và quan sát kết quả.
+	```sh
+	watch -d -n1 netstat -i
+	```
 
 ### Các trang tham khảo
 
 - Cách sử dụng nmcli: http://linoxide.com/linux-command/nmcli-tool-red-hat-centos-7/
+- Lệnh để test bonding: http://www.tecmint.com/configure-network-bonding-or-teaming-in-rhel-centos-7/
