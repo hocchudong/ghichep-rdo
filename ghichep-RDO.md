@@ -556,27 +556,6 @@
 
  - Trong lệnh packstack trên đã dùng tùy chọn để tạo ra mô hình sử dụng cả provider và selfservice đó là  `--os-neutron-ovs-bridges-compute=br-ex`
 
- - Lựa chọn 3: Cài trên một máy duy nhất và có 2 NICs
-
-     ```sh
-     packstack \
-        --install-hosts=172.16.69.30 \
-        --default-password=Welcome123 \
-        --os-cinder-install=y \
-        --os-ceilometer-install=y \
-        --os-trove-install=n \
-        --os-ironic-install=n \
-        --nagios-install=n \
-        --os-swift-install=n \
-        --os-gnocchi-install=n \
-        --os-aodh-install=n \
-        --os-neutron-ovs-bridge-mappings=extnet:br-ex \
-        --os-neutron-ovs-bridge-interfaces=br-ex:eno33554952 \
-        --os-neutron-ml2-type-drivers=vxlan,flat \
-        --os-neutron-ovs-tunnel-if=eno16777728 \
-        --provision-demo=n
-        ```
-
 - Kết thúc quá trình cài, màn hình sẽ có thông báo để sử dụng OpenStack
 
 ### Upload image, tạo network, router , máy ảo
@@ -665,6 +644,26 @@ https://thaiopen.github.io/sipacloudcourse/packstack.html#install-openstack-pupp
     ```
     
 
+- Mô hình provider network và selfserver network trên cùng 1 máy có 02 NICs
+
+     ```sh
+     packstack \
+        --install-hosts=172.16.69.30 \
+        --default-password=Welcome123 \
+        --os-cinder-install=y \
+        --os-ceilometer-install=y \
+        --os-trove-install=n \
+        --os-ironic-install=n \
+        --nagios-install=n \
+        --os-swift-install=n \
+        --os-gnocchi-install=n \
+        --os-aodh-install=n \
+        --os-neutron-ovs-bridge-mappings=extnet:br-ex \
+        --os-neutron-ovs-bridge-interfaces=br-ex:eno33554952 \
+        --os-neutron-ml2-type-drivers=vxlan,flat \
+        --os-neutron-ovs-tunnel-if=eno16777728 \
+        --provision-demo=n
+        ```
 
 <a name="4"></a
 ## IV. Các lệnh trong `packstack`
