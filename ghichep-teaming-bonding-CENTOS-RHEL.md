@@ -143,7 +143,7 @@
 		```sh
 		BOOTPROTO=none
 		ONBOOT=yes
-		MASTER=bond0
+		MASTER=bond1
 		SLAVE=yes
 		```
 
@@ -156,7 +156,7 @@
 		```sh
 		BOOTPROTO=none
 		ONBOOT=yes
-		MASTER=bond0
+		MASTER=bond1
 		SLAVE=yes
 		```
 
