@@ -212,9 +212,57 @@
   ```
 
 - Sau khi cài đặt hoàn tất, trên màn hình sẽ xuất hiên thông báo về các kết quả cài đặt cùng với link truy cập và các tài khoản. 
+  ```sh
+   **** Installation completed successfully ******
 
+  Additional information:
+   * A new answerfile was created in: /root/packstack-answers-20170417-025733.txt
+   * Time synchronization installation was skipped. Please note that unsynchronized time on server instances might be problem for some OpenStack components.
+   * File /root/keystonerc_admin has been created on OpenStack client host 172.16.69.61. To use the command line tools you need to source the file.
+   * To access the OpenStack Dashboard browse to http://172.16.69.61/dashboard .
+  Please, find your login credentials stored in the keystonerc_admin in your home directory.
+   * The installation log file is available at: /var/tmp/packstack/20170417-025732-fagnK0/openstack-setup.log
+   * The generated manifests are available at: /var/tmp/packstack/20170417-025732-fagnK0/manifests
+  ```
 
+- Truy cập vào web theo địa chỉ `http://172.16.69.61/dashboard`, tài khoản là `admin`, mật khẩu là `Welcome123`
+  
 ## 3. Sử dụng OpenStack sau khi cài đặt xong.
+- 
+
+- Kiểm tra trạng thái của các service NOVA bằng lệnh `openstack compute service list`, nếu state là `up` thì có thể tiếp tục các bước dưới.
+  ```sh
+  [root@controller ~(keystone_admin)]# openstack compute service list
+  +----+------------------+------------+----------+---------+-------+----------------------------+
+  | Id | Binary           | Host       | Zone     | Status  | State | Updated At                 |
+  +----+------------------+------------+----------+---------+-------+----------------------------+
+  |  4 | nova-cert        | controller | internal | enabled | up    | 2017-04-16T22:35:35.000000 |
+  |  5 | nova-consoleauth | controller | internal | enabled | up    | 2017-04-16T22:35:34.000000 |
+  |  6 | nova-scheduler   | controller | internal | enabled | up    | 2017-04-16T22:35:35.000000 |
+  |  7 | nova-conductor   | controller | internal | enabled | up    | 2017-04-16T22:35:35.000000 |
+  |  8 | nova-compute     | compute1   | nova     | enabled | up    | 2017-04-16T22:35:37.000000 |
+  |  9 | nova-compute     | compute2   | nova     | enabled | up    | 2017-04-16T22:35:43.000000 |
+  +----+------------------+------------+----------+---------+-------+----------------------------+
+  [root@controller ~(keystone_admin)]#
+  ```
+
+- Kiểm tra trạng thái của dịch vụ neutron bằng lệnh `neutron agent-list`, nếu có biểu tượng `:)` thì có thể tiếp tục bước dưới.
+  ```sh
+  [root@controller ~(keystone_admin)]# neutron agent-list
+  +--------------------------------------+--------------------+------------+-------------------+-------+----------------+---------------------------+
+  | id                                   | agent_type         | host       | availability_zone | alive | admin_state_up | binary                    |
+  +--------------------------------------+--------------------+------------+-------------------+-------+----------------+---------------------------+
+  | 28e6efd3-a651-4c3c-b199-609cd73e61c3 | Metadata agent     | controller |                   | :-)   | True           | neutron-metadata-agent    |
+  | 5c39037b-a7c6-4130-b809-aa104939dd8a | DHCP agent         | controller | nova              | :-)   | True           | neutron-dhcp-agent        |
+  | 60d6bb80-4869-4d09-9a95-15b931234009 | Open vSwitch agent | controller |                   | :-)   | True           | neutron-openvswitch-agent |
+  | 80adc548-ef48-4c94-b41b-970ea0cd90e0 | L3 agent           | controller | nova              | :-)   | True           | neutron-l3-agent          |
+  | 9b83dbb9-00a9-44f6-b482-842f3ff48490 | Open vSwitch agent | compute2   |                   | :-)   | True           | neutron-openvswitch-agent |
+  | dd40b429-121d-4130-9801-6cb84960df49 | Open vSwitch agent | compute1   |                   | :-)   | True           | neutron-openvswitch-agent |
+  | dee2b98c-e48c-43df-ac61-978c59511372 | Metering agent     | controller |                   | :-)   | True           | neutron-metering-agent    |
+  +--------------------------------------+--------------------+------------+-------------------+-------+----------------+---------------------------+
+  [root@controller ~(keystone_admin)]#
+  ```
+
 ### 3.1. Upload image
 - Thực thi biến môi trường
   ```sh
@@ -254,19 +302,60 @@
   --dns-nameserver 8.8.8.8
   ```
 
-- Tạo router và addd các interface
+- Tạo router tên là `Vrouter` và add các network vừa tạo ở trên vào router.
 
   ```sh
-  neutron router-create router
-  neutron router-gateway-set router external_network
-  neutron router-interface-add router private_subnet
+  neutron router-create Vrouter
+  neutron router-gateway-set Vrouter external_network
+  neutron router-interface-add Vrouter private_subnet
   ```
 
+- Kiểm tra IP của router vừa được gán interface
+  ```sh
+  [root@controller ~(keystone_admin)]# neutron router-port-list Vrouter
+  +--------------------------------------+------+-------------------+-------------------------------------------------------------------------------------+
+  | id                                   | name | mac_address       | fixed_ips                                                                           |
+  +--------------------------------------+------+-------------------+-------------------------------------------------------------------------------------+
+  | 6e55b512-597a-40e6-840b-6fb09b0bf206 |      | fa:16:3e:28:1e:8d | {"subnet_id": "63444746-8027-4929-b1b6-cff63faf3cbd", "ip_address": "10.0.0.1"}     |
+  | 97067c33-a250-4daf-a8d9-4a4238e31395 |      | fa:16:3e:5a:69:60 | {"subnet_id": "4901d8ac-95f2-4791-9331-bd905dc82640", "ip_address": "172.16.69.81"} |
+  +--------------------------------------+------+-------------------+-------------------------------------------------------------------------------------+
+  [root@controller ~(keystone_admin)]#
+  ```
+  - Ping tới ip của dải provider để kiểm tra xem đã gán được interface hay chưa
+    ```sh
+    [root@controller ~(keystone_admin)]# ping 172.16.69.81
+    PING 172.16.69.81 (172.16.69.81) 56(84) bytes of data.
+    64 bytes from 172.16.69.81: icmp_seq=1 ttl=64 time=1.44 ms
+    64 bytes from 172.16.69.81: icmp_seq=2 ttl=64 time=0.095 ms
+    ```
+  
+- Mở các rule cần thiết cho máy ảo (trong thực tế nên mở các rule cần thiết, tránh mở tất cả các port như hướng dẫn này)
+  ```sh
+  openstack security group rule create --proto icmp default
+  openstack security group rule create --proto tcp --dst-port 1:65535 default
+  openstack security group rule create --proto udp --dst-port 1:65535 default
+  ```
+  
 - Truy cập vào web để tạo máy ảo.
 
-### 3.3. Mở các rule cho máy ảo
-
-### 3.4. Tạo máy ảo
-
-
 ## 4. Sử dụng dashboad
+### 4.1. Tạo máy ảo
+
+- Đăng nhập vào dashboad và thưc hiện theo bước sau
+- Click vào tab `Instances` và chọn `Launch Instance`
+![horizon0.png](../images/horizon0.png)
+
+- Trong tab `Details`, nhập tên máy ảo
+![horizon1.png](../images/horizon1.png)
+
+
+- Trong tab `Source` chọn images cho máy ảo
+![horizon2.png](../images/horizon2.png)
+
+- Trong tab `Flavor` chọn kích thước của máy ảo 
+![horizon3.png](../images/horizon3.png)
+
+- Trong tab `Network` chọn dải mạng mà máy ảo sẽ gắn vào. Trong ví dụ này chọn dải external, nếu chọn dải private thì cần thực hiện bước floating IP.
+![horizon4.png](../images/horizon4.png)
+
+- Chờ máy máy khởi tạo và thưc hiện ping, ssh để kiểm tra với IP được cấp trên dashboad
