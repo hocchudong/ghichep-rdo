@@ -1,0 +1,48 @@
+echo "Setup IP  eno16777728"
+nmcli c modify eno16777728 ipv4.addresses 10.10.10.30/24
+nmcli c modify eno16777728 ipv4.method manual
+
+echo "Setup IP  eno33554952"
+nmcli c modify eno33554952 ipv4.addresses 172.16.69.30/24
+nmcli c modify eno33554952 ipv4.gateway 172.16.69.1
+nmcli c modify eno33554952 ipv4.dns 8.8.8.8
+nmcli c modify eno33554952 ipv4.method manual
+
+
+sudo systemctl disable firewalld
+sudo systemctl stop firewalld
+sudo systemctl disable NetworkManager
+sudo systemctl disable NetworkManager
+sudo systemctl enable network
+sudo systemctl start network
+
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+init 6
+
+
+sudo yum install -y https://rdoproject.org/repos/rdo-release.rpm
+
+yum update -y
+
+sudo yum install -y wget 
+yum install -y openstack-packstack
+
+init 6
+
+
+packstack --allinone \
+    --os-cinder-install=n \
+    --os-ceilometer-install=n \
+    --os-trove-install=n \
+    --os-ironic-install=n \
+    --nagios-install=n \
+    --os-swift-install=n \
+    --os-gnocchi-install=n \
+    --os-aodh-install=n \
+    --os-neutron-ovs-bridge-mappings=extnet:br-ex \
+    --os-neutron-ovs-bridge-interfaces=br-ex:eno33554952 \
+    --os-neutron-ml2-type-drivers=vxlan,flat \
+    --os-compute-hosts=172.16.69.30,172.16.69.31,172.16.69.32 \
+    --os-neutron-ovs-tunnel-if=eno16777728 \
+    --provision-demo=n

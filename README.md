@@ -1,1 +1,1 @@
-# Ghi chép về RDO
+# Các ghi chép về RDO
