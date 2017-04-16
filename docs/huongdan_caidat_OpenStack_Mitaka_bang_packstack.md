@@ -206,7 +206,7 @@
       --os-neutron-ovs-bridges-compute=br-ex \
       --os-neutron-ml2-type-drivers=vxlan,flat \
       --os-controller-host=172.16.69.61 \
-      --os-compute-hosts=172.16.69.62, 172.16.69.63 \
+      --os-compute-hosts=172.16.69.62,172.16.69.63 \
       --os-neutron-ovs-tunnel-if=eno16777728 \
       --provision-demo=n
   ```
