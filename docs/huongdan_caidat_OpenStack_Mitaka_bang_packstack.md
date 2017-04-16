@@ -48,29 +48,30 @@
 	```
 
 - Thiết lập IP 
+  ```sh
+  echo "Setup IP  eno16777728"
+  nmcli c modify eno16777728 ipv4.addresses 10.10.10.61/24
+  nmcli c modify eno16777728 ipv4.method manual
+  nmcli con mod eno16777728 connection.autoconnect yes
 
-    ```sh
-    echo "Setup IP  eno16777728"
-    nmcli c modify eno16777728 ipv4.addresses 10.10.10.61/24
-    nmcli c modify eno16777728 ipv4.method manual
-
-    echo "Setup IP  eno33554952"
-    nmcli c modify eno33554952 ipv4.addresses 172.16.69.61/24
-    nmcli c modify eno33554952 ipv4.gateway 172.16.69.1
-    nmcli c modify eno33554952 ipv4.dns 8.8.8.8
-    nmcli c modify eno33554952 ipv4.method manual
+  echo "Setup IP  eno33554952"
+  nmcli c modify eno33554952 ipv4.addresses 172.16.69.61/24
+  nmcli c modify eno33554952 ipv4.gateway 172.16.69.1
+  nmcli c modify eno33554952 ipv4.dns 8.8.8.8
+  nmcli c modify eno33554952 ipv4.method manual
+  nmcli con mod eno33554952 connection.autoconnect yes
 
 
-    sudo systemctl disable firewalld
-    sudo systemctl stop firewalld
-    sudo systemctl disable NetworkManager
-    sudo systemctl stop NetworkManager
-    sudo systemctl enable network
-    sudo systemctl start network
+  sudo systemctl disable firewalld
+  sudo systemctl stop firewalld
+  sudo systemctl disable NetworkManager
+  sudo systemctl stop NetworkManager
+  sudo systemctl enable network
+  sudo systemctl start network
 
-    sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
-
-    ```
+  sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+  ```
+  
 - Khai báo repos cho OpenStack Mitaka
 
    ```sh
@@ -98,13 +99,14 @@
   echo "Setup IP  eno16777728"
   nmcli c modify eno16777728 ipv4.addresses 10.10.10.62/24
   nmcli c modify eno16777728 ipv4.method manual
+  nmcli con mod eno16777728 connection.autoconnect yes
 
   echo "Setup IP  eno33554952"
   nmcli c modify eno33554952 ipv4.addresses 172.16.69.62/24
   nmcli c modify eno33554952 ipv4.gateway 172.16.69.1
   nmcli c modify eno33554952 ipv4.dns 8.8.8.8
   nmcli c modify eno33554952 ipv4.method manual
-
+  nmcli con mod eno33554952 connection.autoconnect yes
 
   sudo systemctl disable firewalld
   sudo systemctl stop firewalld
@@ -138,13 +140,14 @@
   echo "Setup IP  eno16777728"
   nmcli c modify eno16777728 ipv4.addresses 10.10.10.63/24
   nmcli c modify eno16777728 ipv4.method manual
+  nmcli con mod eno16777728 connection.autoconnect yes
 
   echo "Setup IP  eno33554952"
   nmcli c modify eno33554952 ipv4.addresses 172.16.69.63/24
   nmcli c modify eno33554952 ipv4.gateway 172.16.69.1
   nmcli c modify eno33554952 ipv4.dns 8.8.8.8
   nmcli c modify eno33554952 ipv4.method manual
-
+  nmcli con mod eno33554952 connection.autoconnect yes
 
   sudo systemctl disable firewalld
   sudo systemctl stop firewalld
