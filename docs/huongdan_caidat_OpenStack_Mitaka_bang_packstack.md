@@ -78,7 +78,7 @@
     sudo yum install -y centos-release-openstack-mitaka
     yum update -y
 
-    sudo yum install -y wget crudini
+    sudo yum install -y wget crudini fping
     yum install -y openstack-packstack
     init 6
     ```
@@ -123,7 +123,7 @@
   sudo yum install -y centos-release-openstack-mitaka
   yum update -y
 
-  sudo yum install -y wget crudini
+  sudo yum install -y wget crudini fping
   yum install -y openstack-packstack
   init 6
   ```
@@ -164,7 +164,7 @@
   sudo yum install -y centos-release-openstack-mitaka
   yum update -y
 
-  sudo yum install -y wget crudini
+  sudo yum install -y wget crudini fping
   yum install -y openstack-packstack
   init 6
   ```
@@ -172,7 +172,19 @@
     
 ### 2.4. Bắt đầu cài đặt `packstack` trên trên Controller
 
-- Đứng trên Controler và thực hiện các bước cài đặt dưới.
+- Login vào máy chủ Controler và thực hiện các bước dưới bằng  quyền root.
+- Thực hiện lệnh `fping` từ máy `controller` để kiểm tra các IP trên các máy đã thiết lập đúng hay chưa.
+  ```sh
+  fping 10.10.10.61 10.10.10.62 10.10.10.63
+  ```
+  - Nếu kết quả KHÔNG như bên dưới thì cần kiểm tra lại các card mạng và bước thiết lập IP trên từng node.
+    ```sh
+    [root@controller ~]# fping 10.10.10.61 10.10.10.62 10.10.10.63
+    10.10.10.61 is alive
+    10.10.10.62 is alive
+    10.10.10.63 is alive
+    ```
+- 
 
 - Trong hướng dẫn này sẽ thực hiện cài đặt đồng thời 2 usecase về network của OpenStack, đó là `Provider network` và `Self service network`. Có nghĩa là máy ảo có thể gắn vào dải `provider` hoặc `selfservice`
 - SSH vào máy chủ Controller và thực hiện bằng quyền `root`
