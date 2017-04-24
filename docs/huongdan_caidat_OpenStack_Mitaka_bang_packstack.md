@@ -290,7 +290,7 @@
 - Tạo subnet trong network public 
   ```sh
   neutron subnet-create --name public_subnet \
-  --enable_dhcp=False \
+  --enable_dhcp=True --dns-nameserver 8.8.8.8\
   --allocation-pool=start=172.16.69.80,end=172.16.69.100 \
   --gateway=172.16.69.1 external_network 172.16.69.0/24
   ```
