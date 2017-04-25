@@ -171,7 +171,7 @@
   
 - Tạo 1 trang html trên LB1 để test 
   ```sh
-  cat << EOF > /usr/share/nginx/html
+  cat << EOF > /usr/share/nginx/html/index.html
   <html>
   <body>
   <div style="width: 100%; font-size: 40px; font-weight: bold; text-align: center;">
@@ -237,7 +237,7 @@
   
 - Tạo 1 trang html trên LB2 để test 
   ```sh
-  cat << EOF > /usr/share/nginx/html
+  cat << EOF > /usr/share/nginx/html/index.html
   <html>
   <body>
   <div style="width: 100%; font-size: 40px; font-weight: bold; text-align: center;">
