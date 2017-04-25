@@ -125,6 +125,9 @@
 - Đặt hostname cho LB1
   ```sh
   hostnamectl set-hostname LB1
+  
+  echo "172.16.69.23 lb1" >> /etc/hosts
+  echo "172.16.69.24 lb2" >> /etc/hosts
   ```
 
 - Đặt địa chỉ IP cho các NICs
@@ -196,7 +199,10 @@
   ```
 - Đặt hostname cho LB2
   ```sh
-  hostnamectl set-hostname LB2
+  hostnamectl set-hostname lb2
+  
+  echo "172.16.69.23 lb1" >> /etc/hosts
+  echo "172.16.69.24 lb2" >> /etc/hosts
   ```
 - Đặt IP cho các NICs
   ```sh
@@ -269,7 +275,7 @@
 - Lưu ý:
   - Bước này thực hiện trên cả 2 máy chủ LB (LB1 và LB2)
 
-- Cài đặt `pacemaker` trên máy chủ LB1
+- Cài đặt `pacemaker` trên máy chủ LB1 (làm tương tự với LB2)
   ```sh
   yum -y install pacemaker pcs
   ```
@@ -294,8 +300,61 @@
   ```sh
   passwd hacluster
   ```
+  - Lưu ý: đặt mật khẩu giống nhau trên cả 2 node LB1 và LB2. User cho 2 node là `hacluster`
 
 ### Tạo cluster 
-- Đứng trên 1 trong 2 node để thực hiện các bước dưới.
+- Đứng trên 1 trong 2 node để thực hiện các bước dưới. Chỉ đứng trên 1 node thực hiện bước này 
+- Thực hiện lệnh dưới để thiết lập xác thực giữa `LB1` và `LB2`, trong hướng dẫn này tôi đứng trên LB1 
+  ```sh
+  pcs cluster auth lb1 lb2
+  ```
+  - Kết quả như sau:
+    ```
+    [root@lb1 ~]# pcs cluster auth LB1 LB2
+    Username: hacluster
+    Password:
+    lb1: Authorized
+    lb2: Authorized
+    ```
+- Cấu hình cluster 
+  ```sh
+  pcs cluster setup --name ha_cluster lb1 lb2
+  ```
 
+  - Kết quả như sau
+    ```sh
+    [root@lb1 ~]# pcs cluster setup --name ha_cluster lb1 lb2
+    Destroying cluster on nodes: lb1, lb2...
+    lb1: Stopping Cluster (pacemaker)...
+    lb2: Stopping Cluster (pacemaker)...
+    lb1: Successfully destroyed cluster
+    lb2: Successfully destroyed cluster
 
+    Sending cluster config files to the nodes...
+    lb1: Succeeded
+    lb2: Succeeded
+
+    Synchronizing pcsd certificates on nodes lb1, lb2...
+    lb1: Success
+    lb2: Success
+
+    Restarting pcsd on the nodes in order to reload the certificates...
+    lb1: Success
+    lb2: Success
+    [root@lb1 ~]#
+    ```
+    
+- Khởi động service cho cluster. Chỉ đứng trên 1 node thực hiện bước này 
+  ```sh
+  pcs cluster start --all 
+  ```
+
+- Kích hoạt cluster. Chỉ đứng trên 1 node thực hiện bước này 
+  ```sh
+  pcs cluster enable --all 
+  ```
+
+- Kiểm tra trạng thái của cluster. Chỉ đứng trên 1 node thực hiện bước này 
+  ```sh
+  pcs status cluster 
+  ```
