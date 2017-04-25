@@ -129,10 +129,8 @@
 - Đăng nhập lại vào máy LB1 với địa chỉ ở trên và cài nginx
   ```sh
   yum install -y wget 
-
-  wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm
-  rpm -ivh epel-release-7-9.noarch.rpm
-
+  yum install -y epel-release
+  
   yum --enablerepo=epel -y install nginx
   ```
 
@@ -183,9 +181,7 @@
 - Đăng nhập lại vào máy LB2 với địa chỉ ở trên và cài nginx trên LB2
   ```sh
   yum install -y wget 
-
-  wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm
-  rpm -ivh epel-release-7-9.noarch.rpm
+  yum install -y epel-release
 
   yum --enablerepo=epel -y install nginx
   ```
