@@ -1,11 +1,9 @@
 # Cài đặt httpd, pacemaker, corosync
+## Mô hình
 
-#########################
-###  Cài đặt APACHE   ###
-#########################
+## IP Planning 
 
 ### Cài đặt httpd trên máy apache1
-
 
 - Khai bao repos
   ```sh 
@@ -49,7 +47,7 @@
 
 ### Cài đặt httpd trên máy apache2
 
-- Khai bao repos
+- Khaibáo repos để tăng tốc độ cài đặt
   ```sh
   echo "proxy=http://123.30.178.220:3142" >> /etc/yum.conf 
   yum -y update
@@ -91,7 +89,7 @@
 
 ### Cài đặt NGINX trên LB1
 
--  Khai bao repos 
+- Khaibáo repos để tăng tốc độ cài đặt
   ```
   echo "proxy=http://123.30.178.220:3142" >> /etc/yum.conf 
   yum -y update
@@ -138,16 +136,16 @@
   yum --enablerepo=epel -y install nginx
   ```
 
-### Khởi động nginx
+- Khởi động nginx
+  ```sh
+  systemctl start nginx 
+  systemctl enable nginx 
 
-systemctl start nginx 
-systemctl enable nginx 
-
-systemctl restart nginx 
-
+  systemctl restart nginx 
+  ```
 
 ### Cài đặt NGINX trên LB2 
-- Khai bao repos 
+- Khaibáo repos để tăng tốc độ cài đặt
   ```sh
   echo "proxy=http://123.30.178.220:3142" >> /etc/yum.conf 
   yum -y update
@@ -191,16 +189,15 @@ systemctl restart nginx
 
   yum --enablerepo=epel -y install nginx
   ```
-### Khởi động nginx
+  
+- Khởi động nginx
+  ```sh
+  systemctl start nginx 
+  systemctl enable nginx 
 
-systemctl start nginx 
-systemctl enable nginx 
+  systemctl restart nginx 
+  ```
 
-systemctl restart nginx 
-
-#########################
-### Cài đặt pacemaker ###
-#########################
 ### Cài đặt pacemaker trên LB1
 
 
