@@ -39,3 +39,15 @@
 
   init 6
   ````
+  
+### Khai báo repos cho Openresty
+
+- Khai báo repos
+  ```sh
+  sudo yum-config-manager --add-repo https://openresty.org/yum/centos/OpenResty.repo
+  ```
+  
+- Cài đặt openresty
+  ```sh
+  sudo yum install openresty
+  ```
