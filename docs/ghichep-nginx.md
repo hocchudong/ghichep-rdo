@@ -181,6 +181,11 @@
   </html>
   EOF
   ```
+- Khởi động lại nginx
+  ```sh
+  systemctl restart nginx 
+  ```
+  
 - Truy cập vào IP của LB2, sẽ thấy hostname của LB1
 
 ### Cài đặt NGINX trên LB2 
@@ -247,9 +252,50 @@
   </html>
   EOF
   ```
+  
+- Khởi động lại nginx
+  ```sh
+  systemctl restart nginx 
+  ```
+  
 - Truy cập vào IP của LB2, sẽ thấy hostname của LB2
 
-### Cài đặt pacemaker trên LB1
+## Cài đặt pacemaker và corosync để tạo cluster cho nginx 
+- Packer dùng để quản lý các tài nguyên (web server - nginx, database, IP VIP)
+- Corosync dùng để làm `messenger` theo dõi tình trạng của các tài nguyên ở trên. 
 
+
+### Cài đặt pacemaker trên LB1 và trên LB2 
+- Lưu ý:
+  - Bước này thực hiện trên cả 2 máy chủ LB (LB1 và LB2)
+
+- Cài đặt `pacemaker` trên máy chủ LB1
+  ```sh
+  yum -y install pacemaker pcs
+  ```
+  - Sau khi cài xong, sử dụng lệnh dưới để kiểm tra xem có gói pacemaker và corosync hay chưa `rpm -qa | egrep "pacemaker|corosync"`
+    ```sh
+    [root@lb1 ~]# rpm -qa | egrep "pacemaker|corosync"
+    corosynclib-2.4.0-4.el7.x86_64
+    pacemaker-cluster-libs-1.1.15-11.el7_3.4.x86_64
+    pacemaker-1.1.15-11.el7_3.4.x86_64
+    corosync-2.4.0-4.el7.x86_64
+    pacemaker-cli-1.1.15-11.el7_3.4.x86_64
+    pacemaker-libs-1.1.15-11.el7_3.4.x86_64
+    ```
+  
+- Khởi động pacemaker
+  ```sh
+  systemctl start pcsd 
+  systemctl enable pcsd
+  ```
+
+- Đặt mật khẩu cho user admin của cluster, nhập mật khẩu mà bạn muốn sử dụng.
+  ```sh
+  passwd hacluster
+  ```
+
+### Tạo cluster 
+- Đứng trên 1 trong 2 node để thực hiện các bước dưới.
 
 
