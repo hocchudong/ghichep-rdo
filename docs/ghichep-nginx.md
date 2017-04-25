@@ -141,6 +141,20 @@
 
   systemctl restart nginx 
   ```
+  
+- Tạo 1 trang html trên LB1 để test 
+  ```sh
+  cat << EOF >  /var/www/html/index.html
+  <html>
+  <body>
+  <div style="width: 100%; font-size: 40px; font-weight: bold; text-align: center;">
+  `hostname`
+  </div>
+  </body>
+  </html>
+  EOF
+  ```
+- Truy cập vào IP của LB2, sẽ thấy hostname của LB1
 
 ### Cài đặt NGINX trên LB2 
 - Khaibáo repos để tăng tốc độ cài đặt
@@ -193,6 +207,20 @@
 
   systemctl restart nginx 
   ```
+  
+- Tạo 1 trang html trên LB2 để test 
+  ```sh
+  cat << EOF >  /var/www/html/index.html
+  <html>
+  <body>
+  <div style="width: 100%; font-size: 40px; font-weight: bold; text-align: center;">
+  `hostname`
+  </div>
+  </body>
+  </html>
+  EOF
+  ```
+- Truy cập vào IP của LB2, sẽ thấy hostname của LB2
 
 ### Cài đặt pacemaker trên LB1
 
