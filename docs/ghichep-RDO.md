@@ -615,19 +615,18 @@ image-create --name='cirros' \
 <a name="3"></a>
 ## III. Ghi chép khác
 
-# Fix lỗi không nhận metadata khi dùng provider network trong openstack newton sử dụng packstack để cài đặt
-
-- Chỉnh dòng dưới để xử lý lỗi không nhận hostname khi tạo máy ảo, trong file /etc/neutron/dhcp_agent.ini
-  ```sh
-  enable_isolated_metadata = True
-  ```
+- Fix lỗi không nhận metadata khi dùng provider network trong openstack newton sử dụng packstack để cài đặt
+  - Chỉnh dòng dưới để xử lý lỗi không nhận hostname khi tạo máy ảo, trong file /etc/neutron/dhcp_agent.ini
+    ```sh
+    enable_isolated_metadata = True
+    ```
   - Minh họa: http://prntscr.com/f0gqo9
 
 - Fix lỗi không sử dụng được console khi cài đặt OpenStack bằng Packstack trên nhiều node
   - Thay hostname trong dòng dưới ở file `/etc/nova/nova.conf` bằng IP của chính máy compute đó.
-  ```sh
-  vncserver_proxyclient_address=192.168.20.22
-  ```
+    ```sh
+    vncserver_proxyclient_address=192.168.20.22
+    ```
   
 - Setup IP cho Centos 7
 
@@ -681,7 +680,7 @@ image-create --name='cirros' \
         --provision-demo=n
         ```
 
-<a name="4"></a
+<a name="4"></a>
 ## IV. Các lệnh trong `packstack`
 
 - Generate answer file
