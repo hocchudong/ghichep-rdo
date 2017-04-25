@@ -45,6 +45,20 @@
 - Đăng nhập lại máy apache1 và cài đặt httpd
 
 
+- Tạo 1 trang html trên `apache1` để test 
+  ```sh
+  cat << EOF >  /var/www/html/index.html
+  <html>
+  <body>
+  <div style="width: 100%; font-size: 40px; font-weight: bold; text-align: center;">
+  `hostname`
+  </div>
+  </body>
+  </html>
+  EOF
+  ```
+- Truy cập vào IP của `apache1`, sẽ thấy hostname của `apache1`
+
 ### Cài đặt httpd trên máy apache2
 
 - Khaibáo repos để tăng tốc độ cài đặt
@@ -87,6 +101,19 @@
 - Đăng nhập lại máy apache1 và cài đặt httpd
 
 
+- Tạo 1 trang html trên `apache2` để test 
+  ```sh
+  cat << EOF >  /var/www/html/index.html
+  <html>
+  <body>
+  <div style="width: 100%; font-size: 40px; font-weight: bold; text-align: center;">
+  `hostname`
+  </div>
+  </body>
+  </html>
+  EOF
+  ```
+- Truy cập vào IP của `apache2`, sẽ thấy hostname của `apache2`
 ### Cài đặt NGINX trên LB1
 
 - Khaibáo repos để tăng tốc độ cài đặt
@@ -144,7 +171,7 @@
   
 - Tạo 1 trang html trên LB1 để test 
   ```sh
-  cat << EOF >  /var/www/html/index.html
+  cat << EOF > /usr/share/nginx/html
   <html>
   <body>
   <div style="width: 100%; font-size: 40px; font-weight: bold; text-align: center;">
@@ -210,7 +237,7 @@
   
 - Tạo 1 trang html trên LB2 để test 
   ```sh
-  cat << EOF >  /var/www/html/index.html
+  cat << EOF > /usr/share/nginx/html
   <html>
   <body>
   <div style="width: 100%; font-size: 40px; font-weight: bold; text-align: center;">
