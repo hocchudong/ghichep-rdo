@@ -20,7 +20,7 @@ nmcli con mod eno16777728 connection.autoconnect yes
 
 echo "Setup IP  eno33554952"
 nmcli c modify eno33554952 ipv4.addresses 172.16.69.21/24
-nmcli c modify eno33554952 ipv4.gateway 192.168.20.254
+nmcli c modify eno33554952 ipv4.gateway 172.16.69.1
 nmcli c modify eno33554952 ipv4.dns 8.8.8.8
 nmcli c modify eno33554952 ipv4.method manual
 nmcli con mod eno33554952 connection.autoconnect yes
@@ -56,7 +56,7 @@ nmcli con mod eno16777728 connection.autoconnect yes
 
 echo "Setup IP  eno33554952"
 nmcli c modify eno33554952 ipv4.addresses 172.16.69.22/24
-nmcli c modify eno33554952 ipv4.gateway 192.168.20.254
+nmcli c modify eno33554952 ipv4.gateway 172.16.69.1
 nmcli c modify eno33554952 ipv4.dns 8.8.8.8
 nmcli c modify eno33554952 ipv4.method manual
 nmcli con mod eno33554952 connection.autoconnect yes
@@ -94,7 +94,7 @@ nmcli con mod eno16777728 connection.autoconnect yes
 
 echo "Setup IP  eno33554952"
 nmcli c modify eno33554952 ipv4.addresses 172.16.69.23/24
-nmcli c modify eno33554952 ipv4.gateway 192.168.20.254
+nmcli c modify eno33554952 ipv4.gateway 172.16.69.1
 nmcli c modify eno33554952 ipv4.dns 8.8.8.8
 nmcli c modify eno33554952 ipv4.method manual
 nmcli con mod eno33554952 connection.autoconnect yes
