@@ -616,7 +616,7 @@ image-create --name='cirros' \
 ## III. Ghi chép khác
 
 - Fix lỗi không nhận metadata khi dùng provider network trong openstack newton sử dụng packstack để cài đặt
-  - Chỉnh dòng dưới để xử lý lỗi không nhận hostname khi tạo máy ảo, trong file /etc/neutron/dhcp_agent.ini
+  - Chỉnh dòng dưới để xử lý lỗi không nhận hostname khi tạo máy ảo, trong file `/etc/neutron/dhcp_agent.ini` trên `Controller node` và khởi động lại các service của neutron trên Controller node. 
     ```sh
     enable_isolated_metadata = True
     ```
