@@ -483,7 +483,7 @@
 
 - Thực hiện add resource của NGINX, đặt tên là `Web_Cluster`
 - Yêu cầu cần có là nginx đã được cấu hình với mục tiêu là Load Blancing. 
-- Trong mô hình này tham khảo file cấu hình của NGINX ở đây: [File cấu hình nginx](https://gist.githubusercontent.com/congto/ee3e0c28f15aa690ed40c139a960ca3a/raw/08fea694ad17dedc614414eb18dc189656582eed/File_config_nginx_LB_apache_2node)
+- Trong mô hình này tham khảo file cấu hình của NGINX ở đây, file này đã cấu hình NGINX làm chức năng Load Blancing cho Apache: [File cấu hình nginx](https://gist.githubusercontent.com/congto/ee3e0c28f15aa690ed40c139a960ca3a/raw/08fea694ad17dedc614414eb18dc189656582eed/File_config_nginx_LB_apache_2node)
 
   ```sh
   pcs resource create Web_Cluster \
@@ -534,12 +534,37 @@
   
 - Kiểm tra lại trạng thái của các resource, ta sẽ thấy chúng được started trên cùng 1 node.
   ```sh
-  [root@lb1 ~]# pcs status resources
+  [root@lb1 nginx]# pcs status resources
    Virtual_IP     (ocf::heartbeat:IPaddr2):       Started lb1
-   Web_Cluster  
+   Web_Cluster    (ocf::heartbeat:nginx): Started lb1
+  [root@lb1 nginx]#
   ```
 
 ### Kiểm tra hoạt động của Cluster 
+
+- Sử dụng lệnh `crm_mon -1` để kiểm tra hoạt động của cluster 
+  ```sh
+  crm_mon -1
+  ```
+  - Kết quả của lệnh `crm_mon -1`
+    ```sh
+    [root@lb1 ~]# crm_mon -1
+    Stack: corosync
+    Current DC: lb2 (version 1.1.15-11.el7_3.4-e174ec8) - partition with quorum
+    Last updated: Wed Apr 26 17:32:19 2017          Last change: Wed Apr 26 17:00:10 2017 by root via cibadmin on lb1
+
+    2 nodes and 2 resources configured
+
+    Online: [ lb1 lb2 ]
+
+    Active resources:
+
+     Virtual_IP     (ocf::heartbeat:IPaddr2):       Started lb2
+     Web_Cluster    (ocf::heartbeat:nginx): Started lb2
+    ```
+    - Trong kết quả trên, ta có thể quan sát các resource đang được quản lý bởi pacemaker, các resource đang nằm trên node nào. 
+    
+
 
 # Tham khảo:
 - https://www.server-world.info/en/note?os=CentOS_7&p=nginx
