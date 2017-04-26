@@ -433,24 +433,37 @@
 
 - Thiết lập policy cho cơ chế `quorum` (bỏ qua bước này nếu như bạn có chỉ có 2 node)
   ```sh
-  pcs property set stonith-enabled=false
+  pcs property set no-quorum-policy=ignore
   ```
 
 - Disable auto failbask
-```sh
-pcs property set default-resource-stickiness="INFINITY"
-```
+  ```sh
+  pcs property set default-resource-stickiness="INFINITY"
+  ```
 
 - Kiểm tra lại các thiết lập ở trên
   ```sh
   pcs property list 
   ```
+  - Kết quả như bên dưới
+    ```sh
+    [root@lb1 ~]# pcs property list
+    Cluster Properties:
+     cluster-infrastructure: corosync
+     cluster-name: ha_cluster
+     dc-version: 1.1.15-11.el7_3.4-e174ec8
+     default-resource-stickiness: INFINITY
+     have-watchdog: false
+     no-quorum-policy: ignore
+     stonith-enabled: false
+    ```
 
 ## Thêm resource `NGINX` để pacemaker quản lý.
 - Chú ý: 
-  - Resource chính là các ứng dụng được cấu hình cluster, trong bước trên thì VIP cũng là 1 loại resource
-  - Tùy vào tài ngyên mà bạn muốn pacemaker quản lý thì sẽ được add thêm vào trong Cluster
-  - Khi add resource vào cluster thì việc start, stop, restart resource này sẽ do pacemaker quản lý. 
+  - Resource chính là các ứng dụng được cấu hình cluster.
+  - Tùy vào tài ngyên mà bạn muốn pacemaker quản lý thì sẽ được add thêm vào trong Cluster.
+  - Khi add resource vào cluster thì việc   start, stop, restart` resource này sẽ do pacemaker quản lý. 
+  - Corosync có nhiệm vụ làm messenger để báo cho các node biết tính hình các resource đang như thế nào.
 
 ### Thêm resource Virtual IP (VIP) để pacemaker quản lý.
 
@@ -469,6 +482,9 @@ pcs property set default-resource-stickiness="INFINITY"
 ### Thêm resource `NGINX` để pacemaker quản lý.
 
 - Thực hiện add resource của NGINX, đặt tên là `Web_Cluster`
+- Yêu cầu cần có là nginx đã được cấu hình với mục tiêu là Load Blancing. 
+- Trong mô hình này tham khảo file cấu hình của NGINX ở đây: [File cấu hình nginx](https://gist.githubusercontent.com/congto/ee3e0c28f15aa690ed40c139a960ca3a/raw/08fea694ad17dedc614414eb18dc189656582eed/File_config_nginx_LB_apache_2node)
+
   ```sh
   pcs resource create Web_Cluster \
   ocf:heartbeat:nginx \
@@ -483,19 +499,19 @@ pcs property set default-resource-stickiness="INFINITY"
   
 ### Cấu hình điều kiện ràng buộc cho các resource
 - Cấu hình để thiết lập resource `Virtual_IP` và `Web_Cluster` hoạt động trên cùng 1 máy trong cụm cluster
-```sh 
-pcs constraint colocation add Web_Cluster with Virtual_IP INFINITY
-```
+  ```sh 
+  pcs constraint colocation add Web_Cluster with Virtual_IP INFINITY
+  ```
 
 - Thiết lập chế độ khởi động của các resource
-```sh
-pcs constraint order Virtual_IP then Web_Cluster
-````
+  ```sh
+  pcs constraint order Virtual_IP then Web_Cluster
+  ````
 
 - Kiểm tra lại các thiết lập trên
-```sh
-pcs constraint
-```
+  ```sh
+  pcs constraint
+  ```
 
 ### Kiểm tra hoạt động của Cluster 
 
