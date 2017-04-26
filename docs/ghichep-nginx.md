@@ -174,6 +174,12 @@
   ```sh
   systemctl status nginx 
   ```
+
+- Kiểm tra phiên bản của nginx bằng lệnh `nginx -v`
+  ```sh
+  [root@lb1 ~]# nginx -v
+  nginx version: nginx/1.10.2
+  ```
   
 - Tạo 1 trang html trên LoadBlancing1 để test 
   ```sh
@@ -250,6 +256,12 @@
 - Kiểm tra trạng thái của NGINX
   ```sh
   systemctl status nginx 
+  ```
+
+- Kiểm tra phiên bản của nginx bằng lệnh `nginx -v`
+  ```sh
+  [root@lb2 ~]# nginx -v
+  nginx version: nginx/1.10.2
   ```
   
 - Tạo 1 trang html trên LoadBlancing2 để test 
