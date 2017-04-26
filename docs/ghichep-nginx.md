@@ -297,7 +297,7 @@
   ```sh
   yum -y install pacemaker pcs
   ```
-  - Sau khi cài xong, sử dụng lệnh dưới để kiểm tra xem có gói pacemaker và corosync hay chưa `rpm -qa | egrep "pacemaker|corosync"`
+  - Sử dụng lệnh dưới để kiểm tra xem có gói `pacemaker` và `corosync` hay chưa `rpm -qa | egrep "pacemaker|corosync"`
     ```sh
     [root@lb1 ~]# rpm -qa | egrep "pacemaker|corosync"
     corosynclib-2.4.0-4.el7.x86_64
@@ -314,26 +314,26 @@
   systemctl enable pcsd
   ```
 
-- Đặt mật khẩu cho user admin của cluster, nhập mật khẩu mà bạn muốn sử dụng.
+- Đặt mật khẩu cho user `hacluster` của cluster, nhập mật khẩu mà bạn muốn sử dụng.
   ```sh
   passwd hacluster
   ```
-  - Lưu ý: đặt mật khẩu giống nhau trên cả 2 node LoadBlancing1 và LoadBlancing2. User cho 2 node là `hacluster`
+  - Lưu ý: đặt mật khẩu giống nhau trên cả 2 node LoadBlancing1 và LoadBlancing2.
 
 ### Tạo cluster 
-- Đứng trên 1 trong 2 node để thực hiện các bước dưới. Chỉ đứng trên 1 node thực hiện bước này 
+- Đứng trên 1 trong 2 node để thực hiện các bước dưới. Lưu ý: chỉ đứng trên 1 node thực hiện bước này 
 - Thực hiện lệnh dưới để thiết lập xác thực giữa `LoadBlancing1` và `LoadBlancing2`, trong hướng dẫn này tôi đứng trên LB1 
   ```sh
   pcs cluster auth lb1 lb2
   ```
   - Kết quả như sau:
-    ```
-    [root@lb1 ~]# pcs cluster auth lb1 lb2
-    Username: hacluster
-    Password:
-    lb1: Authorized
-    lb2: Authorized
-    ```
+      ```
+      [root@lb1 ~]# pcs cluster auth lb1 lb2
+      Username: hacluster
+      Password:
+      lb1: Authorized
+      lb2: Authorized
+      ```
 - Cấu hình cluster 
   ```sh
   pcs cluster setup --name ha_cluster lb1 lb2
@@ -385,7 +385,7 @@
   lb2: Cluster Enabled
   ```
 
-- Kiểm tra trạng thái của cluster. Có thể đứng trên 1 trong node bất kỳ của cụm cluster để kiểm tra
+- Kiểm tra trạng thái của cluster (`pacemaker`). Có thể đứng trên 1 trong node bất kỳ của cụm cluster để kiểm tra
   ```sh
   pcs status cluster 
   ```
@@ -403,6 +403,123 @@
     lb2: Online
   ```
   
+- Kiểm tra `corosync`, Có thể đứng trên 1 trong node bất kỳ của cụm cluster để kiểm tra
+  ```sh
+  pcs status corosync
+  ```
+  
+  - Kết quả:
+    ```sh
+    [root@lb1 ~]# pcs status corosync
+
+    Membership information
+    ----------------------
+        Nodeid      Votes Name
+             1          1 lb1 (local)
+             2          1 lb2
+    ```
+
 - Lưu ý: tới đây mới chỉ đảm bảo cụm cluster đã sẵn sàng để hoạt động, cần add thêm các `resources agent` để pacemaker quản lý. Thực hiện ở phần dưới.
 
-### Thực hiện add các `resources agent` để pacemaker quản lý. Trong hướng dẫn này sẽ thêm các `resources agent` của NGINX và IP VIP.
+## Cấu hình để thêm các resources vào Cluster
+- Trong hướng dẫn này sẽ thêm các `resources agent` của NGINX và IP VIP.
+- Chỉ cần đứng trên 1 node bất kỳ trong cụm cluster để thưc hiện, trong ví dụ này thực hiện trên node `LoadBlancing1`
+
+### Cấu hình cơ bản cho NGINX
+- Disable cơ chế `STONITH`
+  ```sh
+  pcs property set stonith-enabled=false
+  ```
+
+- Thiết lập policy cho cơ chế `quorum` (bỏ qua bước này nếu như bạn có chỉ có 2 node)
+  ```sh
+  pcs property set stonith-enabled=false
+  ```
+
+- Disable auto failbask
+```sh
+pcs property set default-resource-stickiness="INFINITY"
+```
+
+- Kiểm tra lại các thiết lập ở trên
+  ```sh
+  pcs property list 
+  ```
+
+## Thêm resource `NGINX` để pacemaker quản lý.
+- Chú ý: 
+  - Resource chính là các ứng dụng được cấu hình cluster, trong bước trên thì VIP cũng là 1 loại resource
+  - Tùy vào tài ngyên mà bạn muốn pacemaker quản lý thì sẽ được add thêm vào trong Cluster
+  - Khi add resource vào cluster thì việc start, stop, restart resource này sẽ do pacemaker quản lý. 
+
+### Thêm resource Virtual IP (VIP) để pacemaker quản lý.
+
+- Thiết lập Virtual IP (VIP) cho Cluster. Lựa chọn 1 IP mà bạn muốn làm VIP, IP này chưa được sử dụng trong hệ thống nhé.
+- Trong bài lab này, tôi lựa chọn là `172.16.69.20`. 
+- Tên của resource là `Virtual_IP`
+  ```sh
+  pcs resource create Virtual_IP ocf:heartbeat:IPaddr2 ip=172.16.69.20 cidr_netmask=32 op monitor interval=30s
+  ````
+
+- Kiểm tra trạng thái của các resource hiện tại. 
+  ```sh
+  pcs status resources 
+  ```
+ 
+### Thêm resource `NGINX` để pacemaker quản lý.
+
+- Thực hiện add resource của NGINX, đặt tên là `Web_Cluster`
+  ```sh
+  pcs resource create Web_Cluster \
+  ocf:heartbeat:nginx \
+  configfile=/etc/nginx/nginx.conf \
+  status10url \
+  op monitor interval=5s 
+  ```
+- Kiểm tra trạng thái của các resource hiện tại. 
+  ```sh
+  pcs status resources 
+  ```
+  
+### Cấu hình điều kiện ràng buộc cho các resource
+- Cấu hình để thiết lập resource `Virtual_IP` và `Web_Cluster` hoạt động trên cùng 1 máy trong cụm cluster
+```sh 
+pcs constraint colocation add Web_Cluster with Virtual_IP INFINITY
+```
+
+- Thiết lập chế độ khởi động của các resource
+```sh
+pcs constraint order Virtual_IP then Web_Cluster
+````
+
+- Kiểm tra lại các thiết lập trên
+```sh
+pcs constraint
+```
+
+### Kiểm tra hoạt động của Cluster 
+
+# Tham khảo:
+- https://www.server-world.info/en/note?os=CentOS_7&p=nginx
+- http://blog.air-foron.com/linux/centos-7/post-1433/
+- https://www.server-world.info/en/note?os=CentOS_7&p=pacemaker&f=1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
