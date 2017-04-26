@@ -496,6 +496,15 @@
   ```sh
   pcs status resources 
   ```
+  - Kết quả như bên dưới
+  ```
+  [root@lb1 ~]# pcs status resources
+   Virtual_IP     (ocf::heartbeat:IPaddr2):       Started lb1
+   Web_Cluster    (ocf::heartbeat:nginx): Started lb2
+  ```
+  
+- Trong kết quả trên ta thấy 2 resource đang hoạt động trên 2 node khác nhau, cần thực hiện các bước dưới để cấu hình cluster được hoàn tất. 
+
   
 ### Cấu hình điều kiện ràng buộc cho các resource
 - Cấu hình để thiết lập resource `Virtual_IP` và `Web_Cluster` hoạt động trên cùng 1 máy trong cụm cluster
@@ -511,6 +520,23 @@
 - Kiểm tra lại các thiết lập trên
   ```sh
   pcs constraint
+  ```
+  - Kết quả của lệnh trên như sau
+    ```sh
+    [root@lb1 ~]# pcs constraint
+    Location Constraints:
+    Ordering Constraints:
+      start Virtual_IP then start Web_Cluster (kind:Mandatory)
+    Colocation Constraints:
+      Web_Cluster with Virtual_IP (score:INFINITY)
+    Ticket Constraints:
+    ```
+  
+- Kiểm tra lại trạng thái của các resource, ta sẽ thấy chúng được started trên cùng 1 node.
+  ```sh
+  [root@lb1 ~]# pcs status resources
+   Virtual_IP     (ocf::heartbeat:IPaddr2):       Started lb1
+   Web_Cluster  
   ```
 
 ### Kiểm tra hoạt động của Cluster 
