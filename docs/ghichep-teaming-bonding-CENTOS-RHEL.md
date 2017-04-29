@@ -207,8 +207,38 @@
 	```sh
 	watch -d -n1 netstat -i
 	```
+  
+# Câu hình bonding = lệnh ncmli 
+
+- Cấu hình bond (bond0 là sự kết hợp của `eno16777728` và `eno33554952`)
+```sh
+nmcli con add type bond con-name bond0 ifname bond0 mode active-backup
+
+nmcli con add type bond-slave con-name bond0-eno16777728 ifname eno16777728 master bond0
+
+nmcli con add type bond-slave con-name bond0-eno33554952 ifname eno33554952 master bond0
+
+nmcli con up bond0-eno16777728
+
+nmcli con up bond0-eno33554952
+
+nmcli con up
+```
+
+- Đặt IP cho `bond0`
+```sh
+nmcli c modify bond0 ipv4.addresses 10.10.10.99/24
+nmcli c modify bond0 ipv4.gateway 10.10.10.1
+nmcli c modify bond0 ipv4.dns 8.8.8.8
+nmcli c modify bond0 ipv4.method manual
+nmcli con mod bond0 connection.autoconnect yes
+```
+
+
+
 
 ### Các trang tham khảo
 
 - Cách sử dụng nmcli: http://linoxide.com/linux-command/nmcli-tool-red-hat-centos-7/
 - Lệnh để test bonding: http://www.tecmint.com/configure-network-bonding-or-teaming-in-rhel-centos-7/
+- Cấu hình teaming và bonding https://www.lisenet.com/2016/configure-aggregated-network-links-on-rhel-7-bonding-and-teaming/
