@@ -17,7 +17,7 @@
 
     echo "Setup IP  ens160"
     nmcli c modify ens160 ipv4.addresses 192.168.20.54/24
-    nmcli c modify ens160 ipv4.gateway 192.168.20.54
+    nmcli c modify ens160 ipv4.gateway 192.168.20.254
     nmcli c modify ens160 ipv4.dns 8.8.8.8
     nmcli c modify ens160 ipv4.method manual
     nmcli con mod ens160 connection.autoconnect yes
