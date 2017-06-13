@@ -1,4 +1,4 @@
-# Các ghi chép khi cài đặt RDO - packstack
+# Các ghi chép khi cài đặt RDO - tripleo
 
 
 - Thiết lập hostname
