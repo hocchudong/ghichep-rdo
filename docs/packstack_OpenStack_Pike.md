@@ -89,7 +89,7 @@
   yum install -y openstack-packstack
 
   yum install -y epel-release
-  sudo yum install byobu 
+  sudo yum install -y byobu 
 
   init 6 
     ```
@@ -144,7 +144,7 @@
   yum install -y openstack-packstack
 
   yum install -y epel-release
-  sudo yum install byobu 
+  sudo yum install -y byobu 
 
   init 6 
   ```
@@ -197,21 +197,19 @@
   yum install -y openstack-packstack
 
   yum install -y epel-release
-  sudo yum install byobu 
+  sudo yum install -y byobu 
 
   init 6 
   ```
 
     
-### 2.4. Bắt đầu cài đặt `packstack` trên trên Controller
-
-### THUC HIEN TREN CTL
-#### Cai dat OpenStack bang packstack 
-
+### 3. Cài đặt OpenStack Pike
+#### 3.1. Chuẩn bị file trả lời cho packstack
+- Đứng trên controller để thực hiện các bước sau
 - Gõ lệnh dưới 
-```sh
-byobu
-```
+  ```sh
+  byobu
+  ```
 
 - Tạo file trả lời để cài packstack
   ```sh
@@ -222,7 +220,6 @@ byobu
       --os-ceilometer-install=y \
       --os-trove-install=n \
       --os-ironic-install=n \
-      --nagios-install=n \
       --os-swift-install=n \
       --os-gnocchi-install=y \
       --os-aodh-install=y \
@@ -236,8 +233,81 @@ byobu
       --provision-demo=n
   ```
 
+- Cấu hình cho ceilometer sử dụng  gnocchi làm backend để lưu metric.
+  ```sh
+  sed -i -e 's/CONFIG_CEILOMETER_METERING_BACKEND=database/CONFIG_CEILOMETER_METERING_BACKEND=gnocchi/g' rdotraloi.txt
+  ```
+
 - Thực thi file trả lời vừa tạo ở trên (nếu cần có thể mở ra để chỉnh lại các tham số cần thiết.
 
   ```sh
   packstack --answer-file rdotraloi.txt
   ```
+  
+- Nhập mật khẩu đăng nhập ssh của tài khoản root khi được yêu cầu.
+
+- Chờ để packstack cài đặt xong.
+
+####  3.2. Kiểm tra hoạt động của OpenStack sau khi cài 
+
+- Sau khi cài đặt xong, màn hình sẽ hiển thị thông báo như dưới
+
+  ```sh
+  **** Installation completed successfully ******
+
+  Additional information:
+   * Time synchronization installation was skipped. Please note that unsynchronized time on server instances might be problem for some OpenStack components.
+   * File /root/keystonerc_admin has been created on OpenStack client host 192.168.20.44. To use the command line tools you need to source the file.
+   * To access the OpenStack Dashboard browse to http://192.168.20.44/dashboard .
+  Please, find your login credentials stored in the keystonerc_admin in your home directory.
+   * The installation log file is available at: /var/tmp/packstack/20170917-183822-ZW35Vx/openstack-setup.log
+   * The generated manifests are available at: /var/tmp/packstack/20170917-183822-ZW35Vx/manifests
+  ```
+
+- Đứng trên `Controller1` thực hiện lệnh dưới để sửa các cấu hình cần thiết.
+
+  ```sh
+  sed -i -e 's/enable_isolated_metadata=False/enable_isolated_metadata=True/g' /etc/neutron/dhcp_agent.ini
+  
+  ssh -o StrictHostKeyChecking=no root@192.168.20.45 "sed -i -e 's/compute1/192.168.20.45/g' /etc/nova/nova.conf"
+  
+  ssh -o StrictHostKeyChecking=no root@192.168.20.46 "sed -i -e 's/compute2/192.168.20.46/g' /etc/nova/nova.conf"
+  ```
+  
+- Khởi động lại cả 03 node `Controller1, Compute1, Compute2`.
+
+  ```sh
+  ssh -o StrictHostKeyChecking=no root@192.168.20.45 "init 6"
+  
+  ssh -o StrictHostKeyChecking=no root@192.168.20.46 "init 6"
+  
+  init 6
+  ```
+
+- Đăng nhập lại vào `Controller1` bằng quyền `root` và kiểm tra hoạt động của openstack sau khi cài.
+  - Khai báo biến môi trường
+    ```sh
+    source keystonerc_admin
+    ```
+  
+  - Kiểm tra hoạt động của openstack bằng lệnh dưới (`lưu ý: có thể phải mất vài phút để các service của OpenStack khởi động xong`).
+    ```sh
+    openstack token issue
+    ```
+    
+  - Kết quả lệnh trên như sau:
+    ```sh
+    +------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | Field      | Value                                                                                                                                                                                   |
+    +------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | expires    | 2017-09-17T14:46:54+0000                                                                                                                                                                |
+    | id         | gAAAAABZvnzOyW6-0gJLN5_ZG5zRpj932wYO5EgfvTWdJzU6HYxI1UpAl5_EHvSpU4pA5KWWHzVQkmKBKx0Pex8ZVxcSdBZGCDiJYrNCOd--0fqi80MBQzQuAH7ODATgR2-ZM7Or41Rq1M4dwC1rTLLWoqtiHuY2qJus9OUapJwbDfAivWHYCAk |
+    | project_id | 2f8619d1fea2465cbe302eb74ed10d2e                                                                                                                                                        |
+    | user_id    | 4487225f20454467bf89e21c1a04e921                                                                                                                                                        |
+    +------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    ```
+
+- Ngoài ra có thể kiểm tra thêm bằng cách lệnh khác: `openstack user list` ,  `openstack service list`, `openstack catalog list`
+
+### 4. Tạo network, subnet, router, VM.
+- Bước này có thể tạo bằng GUI hoặc bằng CLI
