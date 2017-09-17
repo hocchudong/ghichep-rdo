@@ -228,8 +228,12 @@
 - Truy cập vào web theo địa chỉ `http://172.16.69.61/dashboard`, tài khoản là `admin`, mật khẩu là `Welcome123`
   
 ## 3. Sử dụng OpenStack sau khi cài đặt xong.
-- 
 
+- Thực hiện lệnh dưới để khai báo biến môi trường mỗi khi đăng nhập phiên mới vào máy chủ.
+
+	```
+	source /root/keystonerc_admin
+	```
 - Kiểm tra trạng thái của các service NOVA bằng lệnh `openstack compute service list`, nếu state là `up` thì có thể tiếp tục các bước dưới.
   ```sh
   [root@controller ~(keystone_admin)]# openstack compute service list
