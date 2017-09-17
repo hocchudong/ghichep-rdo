@@ -203,15 +203,13 @@
   ```
 
     
-### 2.4. Bắt đầu cài đặt `packstack` trên trên Controller
 
-### THUC HIEN TREN CTL
-#### Cai dat OpenStack bang packstack 
-
+### Thực hiện cài đặt OpenStack Pike
+- Đứng trên controller để thực hiện các bước sau
 - Gõ lệnh dưới 
-```sh
-byobu
-```
+  ```sh
+  byobu
+  ```
 
 - Tạo file trả lời để cài packstack
   ```sh
@@ -250,6 +248,8 @@ byobu
 
 - Chờ để packstack cài đặt xong.
 
+### Kiểm tra hoạt động của OpenStack sau khi cài 
+
 - Sau khi cài đặt xong, màn hình sẽ hiển thị thông báo như dưới
 
   ```sh
@@ -284,5 +284,30 @@ byobu
   init 6
   ```
 
-- Đăng nhập lại vào `Controller1` và tạo network, router, security group.
+- Đăng nhập lại vào `Controller1` bằng quyền `root` và kiểm tra hoạt động của openstack sau khi cài.
+  - Khai báo biến môi trường
+  ```sh
+  source keystonerc_admin
+  ```
+  
+  - Kiểm tra hoạt động của openstack bằng lệnh dưới (lưu ý: có thể phải mất vài phút để các service của OpenStack khởi động xong.
+    ```sh
+    openstack token issue
+    ```
+    
+  - Kết quả lệnh trên như sau:
+    ```sh
+    +------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | Field      | Value                                                                                                                                                                                   |
+    +------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | expires    | 2017-09-17T14:46:54+0000                                                                                                                                                                |
+    | id         | gAAAAABZvnzOyW6-0gJLN5_ZG5zRpj932wYO5EgfvTWdJzU6HYxI1UpAl5_EHvSpU4pA5KWWHzVQkmKBKx0Pex8ZVxcSdBZGCDiJYrNCOd--0fqi80MBQzQuAH7ODATgR2-ZM7Or41Rq1M4dwC1rTLLWoqtiHuY2qJus9OUapJwbDfAivWHYCAk |
+    | project_id | 2f8619d1fea2465cbe302eb74ed10d2e                                                                                                                                                        |
+    | user_id    | 4487225f20454467bf89e21c1a04e921                                                                                                                                                        |
+    +------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    ```
+
+- Ngoài ra có thể kiểm tra thêm bằng cách lệnh khác: `openstack user list` ,  `openstack service list`, `openstack catalog list`
+
+### Tạo network, subnet, router, VM.
 
