@@ -222,7 +222,6 @@ byobu
       --os-ceilometer-install=y \
       --os-trove-install=n \
       --os-ironic-install=n \
-      --nagios-install=n \
       --os-swift-install=n \
       --os-gnocchi-install=y \
       --os-aodh-install=y \
@@ -236,8 +235,17 @@ byobu
       --provision-demo=n
   ```
 
+- Cấu hình cho ceilometer sử dụng  gnocchi làm backend để lưu metric.
+  ```sh
+  sed -i -e 's/CONFIG_CEILOMETER_METERING_BACKEND=database/CONFIG_CEILOMETER_METERING_BACKEND=gnocchi/g' rdotraloi.txt
+  ```
+
 - Thực thi file trả lời vừa tạo ở trên (nếu cần có thể mở ra để chỉnh lại các tham số cần thiết.
 
   ```sh
   packstack --answer-file rdotraloi.txt
   ```
+  
+- Nhập mật khẩu đăng nhập ssh của tài khoản root khi được yêu cầu.
+
+- Chờ để packstack cài đặt xong.
