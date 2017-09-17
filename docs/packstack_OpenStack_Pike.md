@@ -311,3 +311,6 @@
 
 ### 4. Tạo network, subnet, router, VM.
 - Bước này có thể tạo bằng GUI hoặc bằng CLI
+- Link truy cập vào web GUI là: 192.168.20.44. Đăng nhập với tài khoản là `admin`, mật khẩu là `Welcome123`
+
+
