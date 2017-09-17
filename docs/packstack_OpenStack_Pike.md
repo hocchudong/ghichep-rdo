@@ -249,3 +249,40 @@ byobu
 - Nhập mật khẩu đăng nhập ssh của tài khoản root khi được yêu cầu.
 
 - Chờ để packstack cài đặt xong.
+
+- Sau khi cài đặt xong, màn hình sẽ hiển thị thông báo như dưới
+
+  ```sh
+  **** Installation completed successfully ******
+
+  Additional information:
+   * Time synchronization installation was skipped. Please note that unsynchronized time on server instances might be problem for some OpenStack components.
+   * File /root/keystonerc_admin has been created on OpenStack client host 192.168.20.44. To use the command line tools you need to source the file.
+   * To access the OpenStack Dashboard browse to http://192.168.20.44/dashboard .
+  Please, find your login credentials stored in the keystonerc_admin in your home directory.
+   * The installation log file is available at: /var/tmp/packstack/20170917-183822-ZW35Vx/openstack-setup.log
+   * The generated manifests are available at: /var/tmp/packstack/20170917-183822-ZW35Vx/manifests
+  ```
+
+- Đứng trên `Controller1` thực hiện lệnh dưới để sửa các cấu hình cần thiết.
+
+  ```sh
+  sed -i -e 's/enable_isolated_metadata=False/enable_isolated_metadata=True/g' /etc/neutron/dhcp_agent.ini
+  
+  ssh -o StrictHostKeyChecking=no root@192.168.20.45 "sed -i -e 's/compute1/192.168.20.45/g' /etc/nova/nova.conf"
+  
+  ssh -o StrictHostKeyChecking=no root@192.168.20.46 "sed -i -e 's/compute2/192.168.20.46/g' /etc/nova/nova.conf"
+  ```
+  
+- Khởi động lại cả 03 node `Controller1, Compute1, Compute2`.
+
+  ```sh
+  ssh -o StrictHostKeyChecking=no root@192.168.20.45 "init 6"
+  
+  ssh -o StrictHostKeyChecking=no root@192.168.20.46 "init 6"
+  
+  init 6
+  ```
+
+- Đăng nhập lại vào `Controller1` và tạo network, router, security group.
+
