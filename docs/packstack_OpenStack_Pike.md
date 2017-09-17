@@ -89,7 +89,7 @@
   yum install -y openstack-packstack
 
   yum install -y epel-release
-  sudo yum install byobu 
+  sudo yum install -y byobu 
 
   init 6 
     ```
@@ -144,7 +144,7 @@
   yum install -y openstack-packstack
 
   yum install -y epel-release
-  sudo yum install byobu 
+  sudo yum install -y byobu 
 
   init 6 
   ```
@@ -197,7 +197,7 @@
   yum install -y openstack-packstack
 
   yum install -y epel-release
-  sudo yum install byobu 
+  sudo yum install -y byobu 
 
   init 6 
   ```
