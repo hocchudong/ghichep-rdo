@@ -203,8 +203,8 @@
   ```
 
     
-
-### Thực hiện cài đặt OpenStack Pike
+### 3. Cài đặt OpenStack Pike
+#### 3.1. Chuẩn bị file trả lời cho packstack
 - Đứng trên controller để thực hiện các bước sau
 - Gõ lệnh dưới 
   ```sh
@@ -248,7 +248,7 @@
 
 - Chờ để packstack cài đặt xong.
 
-### Kiểm tra hoạt động của OpenStack sau khi cài 
+####  3.2. Kiểm tra hoạt động của OpenStack sau khi cài 
 
 - Sau khi cài đặt xong, màn hình sẽ hiển thị thông báo như dưới
 
@@ -286,11 +286,11 @@
 
 - Đăng nhập lại vào `Controller1` bằng quyền `root` và kiểm tra hoạt động của openstack sau khi cài.
   - Khai báo biến môi trường
-  ```sh
-  source keystonerc_admin
-  ```
+    ```sh
+    source keystonerc_admin
+    ```
   
-  - Kiểm tra hoạt động của openstack bằng lệnh dưới (lưu ý: có thể phải mất vài phút để các service của OpenStack khởi động xong.
+  - Kiểm tra hoạt động của openstack bằng lệnh dưới (`lưu ý: có thể phải mất vài phút để các service của OpenStack khởi động xong`).
     ```sh
     openstack token issue
     ```
@@ -309,5 +309,5 @@
 
 - Ngoài ra có thể kiểm tra thêm bằng cách lệnh khác: `openstack user list` ,  `openstack service list`, `openstack catalog list`
 
-### Tạo network, subnet, router, VM.
-
+### 4. Tạo network, subnet, router, VM.
+- Bước này có thể tạo bằng GUI hoặc bằng CLI
