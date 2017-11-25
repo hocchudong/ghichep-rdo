@@ -221,7 +221,7 @@
       --os-trove-install=n \
       --os-ironic-install=n \
       --os-swift-install=n \
-      --os-gnocchi-install=y \
+      --os-panko-install=y \
       --os-aodh-install=y \
       --os-neutron-ovs-bridge-mappings=extnet:br-ex \
       --os-neutron-ovs-bridge-interfaces=br-ex:ens224 \
