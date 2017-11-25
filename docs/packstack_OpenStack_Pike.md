@@ -309,8 +309,33 @@
 
 - Ngoài ra có thể kiểm tra thêm bằng cách lệnh khác: `openstack user list` ,  `openstack service list`, `openstack catalog list`
 
-### 4. Tạo network, subnet, router, VM.
+### 4. Tạo images, network, subnet, router, mở security group và tạo VM.
 - Bước này có thể tạo bằng GUI hoặc bằng CLI
 - Link truy cập vào web GUI là: 192.168.20.44. Đăng nhập với tài khoản là `admin`, mật khẩu là `Welcome123`
+
+#### 4.1. Tạo images
+- Đăng nhập vào node controller1 với quyền root và thực thi các lệnh sau
+- Tải images cirros. Images này dùng để tạo các máy ảo sau này: 
+
+  ```sh
+  wget http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img
+  ```
+
+- Tạo images 
+
+  ```sh
+  source keystonerc_admin
+
+  openstack image create "cirros" \
+    --file cirros-0.3.5-x86_64-disk.img \
+    --disk-format qcow2 --container-format bare \
+    --public
+  ```
+
+- Kiểm tra việc tạo images, kết quả như dưới là thành công. Nếu không có kết quả này thì chịu khó làm lại hoặc đọc log :) 
+
+  ```sh
+  openstack image list
+  ```
 
 
