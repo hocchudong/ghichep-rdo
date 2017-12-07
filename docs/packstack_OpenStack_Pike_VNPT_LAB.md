@@ -229,13 +229,8 @@
       --provision-demo=n
   ```
 
+
   
-- Tắt iptables trên cả 03 node `Controller1, compute1, compute2` sau khi cài xong bởi vì OpenStack Pike tự kích hoạt iptables sau khi cài trên centos7 = packstack. 
-  
-- Cấu hình cho ceilometer sử dụng  gnocchi làm backend để lưu metric.
-  ```sh
-  sed -i -e 's/CONFIG_CEILOMETER_METERING_BACKEND=database/CONFIG_CEILOMETER_METERING_BACKEND=gnocchi/g' rdotraloi.txt
-  ```
 
 - Thực thi file trả lời vừa tạo ở trên (nếu cần có thể mở ra để chỉnh lại các tham số cần thiết.
 
@@ -272,6 +267,21 @@
   
   ssh -o StrictHostKeyChecking=no root@172.16.68.203 "sed -i -e 's/compute2/172.16.68.203/g' /etc/nova/nova.conf"
   ```
+
+- Tắt Iptables trên cả 03 node 
+
+  ```sh 
+  systemctl status iptables
+  systemctl disable iptables
+
+  ssh -o StrictHostKeyChecking=no root@172.16.68.202 "systemctl status iptables"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.202 "systemctl disable iptables"
+
+  ssh -o StrictHostKeyChecking=no root@172.16.68.203 "systemctl status iptables"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.203 "systemctl disable iptables"
+  ```
+
+    
   
 - Khởi động lại cả 03 node `Controller1, Compute1, Compute2`.
 
