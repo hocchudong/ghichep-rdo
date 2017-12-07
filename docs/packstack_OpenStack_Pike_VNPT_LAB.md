@@ -266,17 +266,17 @@
   ```sh
   sed -i -e 's/enable_isolated_metadata=False/enable_isolated_metadata=True/g' /etc/neutron/dhcp_agent.ini
   
-  ssh -o StrictHostKeyChecking=no root@192.168.20.45 "sed -i -e 's/compute1/192.168.20.45/g' /etc/nova/nova.conf"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.202 "sed -i -e 's/compute1/172.16.68.202/g' /etc/nova/nova.conf"
   
-  ssh -o StrictHostKeyChecking=no root@192.168.20.46 "sed -i -e 's/compute2/192.168.20.46/g' /etc/nova/nova.conf"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.203 "sed -i -e 's/compute2/172.16.68.203/g' /etc/nova/nova.conf"
   ```
   
 - Khởi động lại cả 03 node `Controller1, Compute1, Compute2`.
 
   ```sh
-  ssh -o StrictHostKeyChecking=no root@192.168.20.45 "init 6"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.202 "init 6"
   
-  ssh -o StrictHostKeyChecking=no root@192.168.20.46 "init 6"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.203 "init 6"
   
   init 6
   ```
