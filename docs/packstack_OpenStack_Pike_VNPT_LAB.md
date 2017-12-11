@@ -271,13 +271,13 @@
 - Tắt Iptables trên cả 03 node 
 
   ```sh 
-  systemctl status iptables
+  systemctl stop iptables
   systemctl disable iptables
 
-  ssh -o StrictHostKeyChecking=no root@172.16.68.202 "systemctl status iptables"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.202 "systemctl stop iptables"
   ssh -o StrictHostKeyChecking=no root@172.16.68.202 "systemctl disable iptables"
 
-  ssh -o StrictHostKeyChecking=no root@172.16.68.203 "systemctl status iptables"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.203 "systemctl stop iptables"
   ssh -o StrictHostKeyChecking=no root@172.16.68.203 "systemctl disable iptables"
   ```
 
