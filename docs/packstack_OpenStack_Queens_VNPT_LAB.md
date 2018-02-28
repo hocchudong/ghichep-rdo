@@ -1,4 +1,4 @@
-# Hương dẫn cài đặt OpenStack Queen bằng Packstack trên CENTOS 7.x
+# Hương dẫn cài đặt OpenStack Queens bằng Packstack trên CENTOS 7.x
 
 
 ## 1. Các bước chuẩn bị
@@ -77,7 +77,7 @@
   sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
   ```
   
-- Khai báo repos cho OpenStack Pike
+- Khai báo repos cho OpenStack Queens
 
    ```sh
   sudo yum install -y centos-release-openstack-pike
@@ -131,7 +131,7 @@
   sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
   ```
 
-- Khai báo repos cho OpenStack Pike trên node `Compute1`
+- Khai báo repos cho OpenStack Queens trên node `Compute1`
   ```sh
   sudo yum install -y centos-release-openstack-pike
   yum update -y
@@ -182,7 +182,7 @@
   sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
   ```
 
-- Khai báo repos cho OpenStack Pike trên node `Compute2`
+- Khai báo repos cho OpenStack Queens trên node `Compute2`
   ```sh
   sudo yum install -y centos-release-openstack-pike
   yum update -y
@@ -197,7 +197,7 @@
   ```
 
     
-### 3. Cài đặt OpenStack Pike
+### 3. Cài đặt OpenStack Queens
 #### 3.1. Chuẩn bị file trả lời cho packstack
 - Đứng trên controller để thực hiện các bước sau
 - Gõ lệnh dưới 

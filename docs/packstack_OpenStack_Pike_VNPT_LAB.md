@@ -27,12 +27,12 @@
 
 ### 1.3. Mô hình
 
-![topology](../images/packstack_openstack_pike_topology.png)
+![topology](../images/topo-openstack-pike-vnpt-packstack.png)
 
 
 ### 1.4. IP Planning
 
-![ipplanning](../images/packstack_openstack_pike_ip_planning.png)
+![ipplanning](../images/packstack_openstack_pike_vnpt_ip_planning.png)
 
 - Lưu ý: 
   - Sử dụng đúng thứ tự các interface (NICs) của máy để cài đặt OpenStack.
