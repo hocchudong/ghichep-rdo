@@ -1,4 +1,4 @@
-# Hương dẫn cài đặt OpenStack Mitaka bằng Packstack trên CENTOS 7.x
+# Hương dẫn cài đặt OpenStack Pike bằng Packstack trên CENTOS 7.x
 
 
 ## 1. Các bước chuẩn bị
