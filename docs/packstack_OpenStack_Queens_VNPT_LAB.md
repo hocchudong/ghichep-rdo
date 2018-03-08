@@ -79,8 +79,9 @@
   
 - Khai báo repos cho OpenStack Queens
 
-   ```sh
-  sudo yum install -y centos-release-openstack-pike
+  ```sh
+  yum install -y python-setuptools
+  sudo yum install -y centos-release-openstack-queens
   yum update -y
 
   sudo yum install -y wget crudini fping
@@ -88,9 +89,12 @@
 
   yum install -y epel-release
   sudo yum install -y byobu 
+  ```
 
-  init 6 
-    ```
+- Trong queens khi sử dụng packstack để cài có thể gặp lỗi `ERROR : Failed to load plugin from file ssl_001.py`, fix theo hướng dẫn dưới (trong đoạn trên đã cài sẵn các fix rồi nhé)
+```sh
+https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
+```
 
 ### 2.2. Các bước chuẩn bị trên trên Compute1
 
@@ -132,8 +136,10 @@
   ```
 
 - Khai báo repos cho OpenStack Queens trên node `Compute1`
+
   ```sh
-  sudo yum install -y centos-release-openstack-pike
+  yum install -y python-setuptools
+  sudo yum install -y centos-release-openstack-queens
   yum update -y
 
   sudo yum install -y wget crudini fping
@@ -141,9 +147,12 @@
 
   yum install -y epel-release
   sudo yum install -y byobu 
-
-  init 6 
   ```
+  
+- Trong queens khi sử dụng packstack để cài có thể gặp lỗi `ERROR : Failed to load plugin from file ssl_001.py`, fix theo hướng dẫn dưới (trong đoạn trên đã cài sẵn các fix rồi nhé)
+```sh
+https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
+```
 
 ### 2.3. Các bước chuẩn bị trên trên Compute2
 
@@ -183,8 +192,10 @@
   ```
 
 - Khai báo repos cho OpenStack Queens trên node `Compute2`
+
   ```sh
-  sudo yum install -y centos-release-openstack-pike
+  yum install -y python-setuptools
+  sudo yum install -y centos-release-openstack-queens
   yum update -y
 
   sudo yum install -y wget crudini fping
@@ -192,11 +203,13 @@
 
   yum install -y epel-release
   sudo yum install -y byobu 
-
-  init 6 
   ```
 
-    
+- Trong queens khi sử dụng packstack để cài có thể gặp lỗi `ERROR : Failed to load plugin from file ssl_001.py`, fix theo hướng dẫn dưới (trong đoạn trên đã cài sẵn các fix rồi nhé)
+```sh
+https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
+```
+
 ### 3. Cài đặt OpenStack Queens
 #### 3.1. Chuẩn bị file trả lời cho packstack
 - Đứng trên controller để thực hiện các bước sau
