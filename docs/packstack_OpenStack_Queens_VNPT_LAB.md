@@ -230,7 +230,7 @@ https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
       --os-swift-install=n \
       --os-panko-install=y \
       --os-heat-install=y \
-      --os-magnum-install=y \
+      --os-magnum-install=n \
       --os-aodh-install=y \
       --os-neutron-ovs-bridge-mappings=extnet:br-ex \
       --os-neutron-ovs-bridge-interfaces=br-ex:eth2 \
