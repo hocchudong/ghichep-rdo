@@ -1,4 +1,4 @@
-# Hương dẫn cài đặt OpenStack Pike bằng Packstack trên CENTOS 7.x
+# Hương dẫn cài đặt OpenStack Queens bằng Packstack trên CENTOS 7.x
 
 
 ## 1. Các bước chuẩn bị
@@ -18,7 +18,7 @@
 
 - Sử dụng VMware Workstation để tạo các máy cài đặt OpenStack
 - Distro: CentOS 7.x
-- OpenStack Pike
+- OpenStack Queens
 - Sử dụng 03 NICs đối với các máy: Controller1, Compute1, Compute2
   - NIC1 - ens160: là dải mạng sử dụng cho các traffic MGNT + API + DATA VM. Dải mạng này sử dụng chế độ `bridge` trong VMware Workstation. Tùy vào IP máy thật của bạn thì địa chỉ sẽ khác nhau.
   - NIC2 - ens224 : Là dải mạng mà các máy ảo sẽ giao tiếp với bên ngoài. Dải mạng này sử dụng chế độ NAT của VMware Workstation. Địa chỉ IP này phụ thuộc vào việc bạn setup IP cho card NAT trong VMware Workstation.
@@ -27,12 +27,12 @@
 
 ### 1.3. Mô hình
 
-![topology](../images/packstack_openstack_pike_topology.png)
+![topology](../images/topo-openstack-queens-packstack.png)
 
 
 ### 1.4. IP Planning
 
-![ipplanning](../images/packstack_openstack_pike_ip_planning.png)
+![ipplanning](../images/packstack_openstack_queens_ip_planning.png)
 
 - Lưu ý: 
   - Sử dụng đúng thứ tự các interface (NICs) của máy để cài đặt OpenStack.
@@ -49,24 +49,22 @@
 
 - Thiết lập IP 
   ```sh
-  echo "Setup IP  ens160"
-  nmcli c modify ens160 ipv4.addresses 192.168.20.44/24
-  nmcli c modify ens160 ipv4.gateway 192.168.20.254
-  nmcli c modify ens160 ipv4.dns 8.8.8.8
-  nmcli c modify ens160 ipv4.method manual
-  nmcli con mod ens160 connection.autoconnect yes
+  echo "Setup IP  eth0"
+  nmcli c modify eth0 ipv4.addresses 10.10.10.201/24
+  nmcli c modify eth0 ipv4.method manual
+  nmcli con mod eth0 connection.autoconnect yes
 
+  echo "Setup IP  eth1"
+  nmcli c modify eth1 ipv4.addresses 172.16.68.201/24
+  nmcli c modify eth1 ipv4.gateway 172.16.68.1
+  nmcli c modify eth1 ipv4.dns 8.8.8.8
+  nmcli c modify eth1 ipv4.method manual
+  nmcli con mod eth1 connection.autoconnect yes
 
-  echo "Setup IP  ens192"
-  nmcli c modify ens192 ipv4.addresses 172.16.20.44/24
-  nmcli c modify ens192 ipv4.method manual
-  nmcli con mod ens192 connection.autoconnect yes
-
-
-  echo "Setup IP  ens224"
-  nmcli c modify ens224 ipv4.addresses 192.168.40.44/24
-  nmcli c modify ens224 ipv4.method manual
-  nmcli con mod ens224 connection.autoconnect yes
+  echo "Setup IP  eth2"
+  nmcli c modify eth2 ipv4.addresses 192.168.20.201/24
+  nmcli c modify eth2 ipv4.method manual
+  nmcli con mod eth2 connection.autoconnect yes
 
   sudo systemctl disable firewalld
   sudo systemctl stop firewalld
@@ -79,10 +77,11 @@
   sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
   ```
   
-- Khai báo repos cho OpenStack Pike
+- Khai báo repos cho OpenStack Queens
 
-   ```sh
-  sudo yum install -y centos-release-openstack-pike
+  ```sh
+  yum install -y python-setuptools
+  sudo yum install -y centos-release-openstack-queens
   yum update -y
 
   sudo yum install -y wget crudini fping
@@ -90,9 +89,12 @@
 
   yum install -y epel-release
   sudo yum install -y byobu 
+  ```
 
-  init 6 
-    ```
+- Trong queens khi sử dụng packstack để cài có thể gặp lỗi `ERROR : Failed to load plugin from file ssl_001.py`, fix theo hướng dẫn dưới (trong đoạn trên đã cài sẵn các fix rồi nhé)
+```sh
+https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
+```
 
 ### 2.2. Các bước chuẩn bị trên trên Compute1
 
@@ -105,24 +107,22 @@
 - Thiết lập IP 
 
   ```sh
-  echo "Setup IP  ens160"
-  nmcli c modify ens160 ipv4.addresses 192.168.20.45/24
-  nmcli c modify ens160 ipv4.gateway 192.168.20.254
-  nmcli c modify ens160 ipv4.dns 8.8.8.8
-  nmcli c modify ens160 ipv4.method manual
-  nmcli con mod ens160 connection.autoconnect yes
+  echo "Setup IP  eth0"
+  nmcli c modify eth0 ipv4.addresses 10.10.10.202/24
+  nmcli c modify eth0 ipv4.method manual
+  nmcli con mod eth0 connection.autoconnect yes
 
+  echo "Setup IP  eth1"
+  nmcli c modify eth1 ipv4.addresses 172.16.68.202/24
+  nmcli c modify eth1 ipv4.gateway 172.16.68.1
+  nmcli c modify eth1 ipv4.dns 8.8.8.8
+  nmcli c modify eth1 ipv4.method manual
+  nmcli con mod eth1 connection.autoconnect yes
 
-  echo "Setup IP  ens192"
-  nmcli c modify ens192 ipv4.addresses 172.16.20.45/24
-  nmcli c modify ens192 ipv4.method manual
-  nmcli con mod ens192 connection.autoconnect yes
-
-
-  echo "Setup IP  ens224"
-  nmcli c modify ens224 ipv4.addresses 192.168.40.45/24
-  nmcli c modify ens224 ipv4.method manual
-  nmcli con mod ens224 connection.autoconnect yes
+  echo "Setup IP  eth2"
+  nmcli c modify eth2 ipv4.addresses 192.168.20.202/24
+  nmcli c modify eth2 ipv4.method manual
+  nmcli con mod eth2 connection.autoconnect yes
 
   sudo systemctl disable firewalld
   sudo systemctl stop firewalld
@@ -135,9 +135,11 @@
   sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
   ```
 
-- Khai báo repos cho OpenStack Pike trên node `Compute1`
+- Khai báo repos cho OpenStack Queens trên node `Compute1`
+
   ```sh
-  sudo yum install -y centos-release-openstack-pike
+  yum install -y python-setuptools
+  sudo yum install -y centos-release-openstack-queens
   yum update -y
 
   sudo yum install -y wget crudini fping
@@ -145,9 +147,12 @@
 
   yum install -y epel-release
   sudo yum install -y byobu 
-
-  init 6 
   ```
+  
+- Trong queens khi sử dụng packstack để cài có thể gặp lỗi `ERROR : Failed to load plugin from file ssl_001.py`, fix theo hướng dẫn dưới (trong đoạn trên đã cài sẵn các fix rồi nhé)
+```sh
+https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
+```
 
 ### 2.3. Các bước chuẩn bị trên trên Compute2
 
@@ -158,24 +163,22 @@
 
 - Thiết lập IP 
   ```sh
-  echo "Setup IP  ens160"
-  nmcli c modify ens160 ipv4.addresses 192.168.20.46/24
-  nmcli c modify ens160 ipv4.gateway 192.168.20.254
-  nmcli c modify ens160 ipv4.dns 8.8.8.8
-  nmcli c modify ens160 ipv4.method manual
-  nmcli con mod ens160 connection.autoconnect yes
+  echo "Setup IP  eth0"
+  nmcli c modify eth0 ipv4.addresses 10.10.10.203/24
+  nmcli c modify eth0 ipv4.method manual
+  nmcli con mod eth0 connection.autoconnect yes
 
+  echo "Setup IP  eth1"
+  nmcli c modify eth1 ipv4.addresses 172.16.68.203/24
+  nmcli c modify eth1 ipv4.gateway 172.16.68.1
+  nmcli c modify eth1 ipv4.dns 8.8.8.8
+  nmcli c modify eth1 ipv4.method manual
+  nmcli con mod eth1 connection.autoconnect yes
 
-  echo "Setup IP  ens192"
-  nmcli c modify ens192 ipv4.addresses 172.16.20.46/24
-  nmcli c modify ens192 ipv4.method manual
-  nmcli con mod ens192 connection.autoconnect yes
-
-
-  echo "Setup IP  ens224"
-  nmcli c modify ens224 ipv4.addresses 192.168.40.46/24
-  nmcli c modify ens224 ipv4.method manual
-  nmcli con mod ens224 connection.autoconnect yes
+  echo "Setup IP  eth2"
+  nmcli c modify eth2 ipv4.addresses 192.168.20.203/24
+  nmcli c modify eth2 ipv4.method manual
+  nmcli con mod eth2 connection.autoconnect yes
 
   sudo systemctl disable firewalld
   sudo systemctl stop firewalld
@@ -188,9 +191,11 @@
   sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
   ```
 
-- Khai báo repos cho OpenStack Pike trên node `Compute2`
+- Khai báo repos cho OpenStack Queens trên node `Compute2`
+
   ```sh
-  sudo yum install -y centos-release-openstack-pike
+  yum install -y python-setuptools
+  sudo yum install -y centos-release-openstack-queens
   yum update -y
 
   sudo yum install -y wget crudini fping
@@ -198,12 +203,14 @@
 
   yum install -y epel-release
   sudo yum install -y byobu 
-
-  init 6 
   ```
 
-    
-### 3. Cài đặt OpenStack Pike
+- Trong queens khi sử dụng packstack để cài có thể gặp lỗi `ERROR : Failed to load plugin from file ssl_001.py`, fix theo hướng dẫn dưới (trong đoạn trên đã cài sẵn các fix rồi nhé)
+```sh
+https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
+```
+
+### 3. Cài đặt OpenStack Queens
 #### 3.1. Chuẩn bị file trả lời cho packstack
 - Đứng trên controller để thực hiện các bước sau
 - Gõ lệnh dưới 
@@ -222,21 +229,21 @@
       --os-ironic-install=n \
       --os-swift-install=n \
       --os-panko-install=y \
+      --os-heat-install=y \
+      --os-magnum-install=n \
       --os-aodh-install=y \
       --os-neutron-ovs-bridge-mappings=extnet:br-ex \
-      --os-neutron-ovs-bridge-interfaces=br-ex:ens224 \
+      --os-neutron-ovs-bridge-interfaces=br-ex:eth2 \
       --os-neutron-ovs-bridges-compute=br-ex \
       --os-neutron-ml2-type-drivers=vxlan,flat \
-      --os-controller-host=192.168.20.44 \
-      --os-compute-hosts=192.168.20.45,192.168.20.46 \
-      --os-neutron-ovs-tunnel-if=ens192 \
+      --os-controller-host=172.16.68.201 \
+      --os-compute-hosts=172.16.68.202,172.16.68.203 \
+      --os-neutron-ovs-tunnel-if=eth0 \
       --provision-demo=n
   ```
 
-- Cấu hình cho ceilometer sử dụng  gnocchi làm backend để lưu metric.
-  ```sh
-  sed -i -e 's/CONFIG_CEILOMETER_METERING_BACKEND=database/CONFIG_CEILOMETER_METERING_BACKEND=gnocchi/g' rdotraloi.txt
-  ```
+
+  
 
 - Thực thi file trả lời vừa tạo ở trên (nếu cần có thể mở ra để chỉnh lại các tham số cần thiết.
 
@@ -253,15 +260,17 @@
 - Sau khi cài đặt xong, màn hình sẽ hiển thị thông báo như dưới
 
   ```sh
-  **** Installation completed successfully ******
+   **** Installation completed successfully ******
 
   Additional information:
    * Time synchronization installation was skipped. Please note that unsynchronized time on server instances might be problem for some OpenStack components.
-   * File /root/keystonerc_admin has been created on OpenStack client host 192.168.20.44. To use the command line tools you need to source the file.
-   * To access the OpenStack Dashboard browse to http://192.168.20.44/dashboard .
+   * File /root/keystonerc_admin has been created on OpenStack client host 172.16.68.201. To use the command line tools you need to source the file.
+   * To access the OpenStack Dashboard browse to http://172.16.68.201/dashboard .
   Please, find your login credentials stored in the keystonerc_admin in your home directory.
-   * The installation log file is available at: /var/tmp/packstack/20170917-183822-ZW35Vx/openstack-setup.log
-   * The generated manifests are available at: /var/tmp/packstack/20170917-183822-ZW35Vx/manifests
+   * Because of the kernel update the host 172.16.68.202 requires reboot.
+   * Because of the kernel update the host 172.16.68.203 requires reboot.
+   * The installation log file is available at: /var/tmp/packstack/20180309-001110-LD0XmO/openstack-setup.log
+   * The generated manifests are available at: /var/tmp/packstack/20180309-001110-LD0XmO/manifests
   ```
 
 - Đứng trên `Controller1` thực hiện lệnh dưới để sửa các cấu hình cần thiết.
@@ -269,17 +278,32 @@
   ```sh
   sed -i -e 's/enable_isolated_metadata=False/enable_isolated_metadata=True/g' /etc/neutron/dhcp_agent.ini
   
-  ssh -o StrictHostKeyChecking=no root@192.168.20.45 "sed -i -e 's/compute1/192.168.20.45/g' /etc/nova/nova.conf"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.202 "sed -i -e 's/compute1/172.16.68.202/g' /etc/nova/nova.conf"
   
-  ssh -o StrictHostKeyChecking=no root@192.168.20.46 "sed -i -e 's/compute2/192.168.20.46/g' /etc/nova/nova.conf"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.203 "sed -i -e 's/compute2/172.16.68.203/g' /etc/nova/nova.conf"
   ```
+
+- Tắt Iptables trên cả 03 node 
+
+  ```sh 
+  systemctl stop iptables
+  systemctl disable iptables
+
+  ssh -o StrictHostKeyChecking=no root@172.16.68.202 "systemctl stop iptables"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.202 "systemctl disable iptables"
+
+  ssh -o StrictHostKeyChecking=no root@172.16.68.203 "systemctl stop iptables"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.203 "systemctl disable iptables"
+  ```
+
+    
   
 - Khởi động lại cả 03 node `Controller1, Compute1, Compute2`.
 
   ```sh
-  ssh -o StrictHostKeyChecking=no root@192.168.20.45 "init 6"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.202 "init 6"
   
-  ssh -o StrictHostKeyChecking=no root@192.168.20.46 "init 6"
+  ssh -o StrictHostKeyChecking=no root@172.16.68.203 "init 6"
   
   init 6
   ```
