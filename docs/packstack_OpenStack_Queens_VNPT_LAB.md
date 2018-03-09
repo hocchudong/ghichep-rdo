@@ -260,15 +260,17 @@ https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
 - Sau khi cài đặt xong, màn hình sẽ hiển thị thông báo như dưới
 
   ```sh
-  **** Installation completed successfully ******
+   **** Installation completed successfully ******
 
   Additional information:
    * Time synchronization installation was skipped. Please note that unsynchronized time on server instances might be problem for some OpenStack components.
-   * File /root/keystonerc_admin has been created on OpenStack client host 192.168.20.44. To use the command line tools you need to source the file.
-   * To access the OpenStack Dashboard browse to http://192.168.20.44/dashboard .
+   * File /root/keystonerc_admin has been created on OpenStack client host 172.16.68.201. To use the command line tools you need to source the file.
+   * To access the OpenStack Dashboard browse to http://172.16.68.201/dashboard .
   Please, find your login credentials stored in the keystonerc_admin in your home directory.
-   * The installation log file is available at: /var/tmp/packstack/20170917-183822-ZW35Vx/openstack-setup.log
-   * The generated manifests are available at: /var/tmp/packstack/20170917-183822-ZW35Vx/manifests
+   * Because of the kernel update the host 172.16.68.202 requires reboot.
+   * Because of the kernel update the host 172.16.68.203 requires reboot.
+   * The installation log file is available at: /var/tmp/packstack/20180309-001110-LD0XmO/openstack-setup.log
+   * The generated manifests are available at: /var/tmp/packstack/20180309-001110-LD0XmO/manifests
   ```
 
 - Đứng trên `Controller1` thực hiện lệnh dưới để sửa các cấu hình cần thiết.
