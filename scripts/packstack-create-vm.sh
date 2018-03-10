@@ -47,7 +47,7 @@ openstack security group rule create --proto tcp --dst-port 22 default
 echocolor "Tao provider network"
 sleep 3
 openstack network create  --share --external \
-  --provider-physical-network provider \
+  --provider-physical-network extnet \
   --provider-network-type flat extnet
 
 echocolor "Tao subnet cho provider network"
