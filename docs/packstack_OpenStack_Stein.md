@@ -498,8 +498,8 @@ https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
 
 ##### 4.5. Tạo VM	
 
-Cách 1: Truy cập vào dashboard ở địa chỉ http://192.168.80.131 để tạo VM.
-Cách 2: Sử dụng lệnh dưới để tạo VM.
+- Cách 1: Truy cập vào dashboard ở địa chỉ http://192.168.80.131 để tạo VM.
+- Cách 2: Sử dụng lệnh dưới để tạo VM.
 
 
 	
