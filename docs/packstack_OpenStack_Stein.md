@@ -114,8 +114,6 @@ init 6
 - Thiết lập IP 
 
 	```sh
-	hostnamectl set-hostname compute1
-
 	echo "Setup IP  eth0"
 	nmcli con modify eth0 ipv4.addresses 192.168.80.132/24
 	nmcli con modify eth0 ipv4.gateway 192.168.80.1
@@ -284,17 +282,17 @@ https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
 - Sau khi cài đặt xong, màn hình sẽ hiển thị thông báo như dưới
 
   ```sh
-   **** Installation completed successfully ******
+	 **** Installation completed successfully ******
 
-  Additional information:
-   * Time synchronization installation was skipped. Please note that unsynchronized time on server instances might be problem for some OpenStack components.
-   * File /root/keystonerc_admin has been created on OpenStack client host 172.16.68.201. To use the command line tools you need to source the file.
-   * To access the OpenStack Dashboard browse to http://172.16.68.201/dashboard .
-  Please, find your login credentials stored in the keystonerc_admin in your home directory.
-   * Because of the kernel update the host 172.16.68.202 requires reboot.
-   * Because of the kernel update the host 172.16.68.203 requires reboot.
-   * The installation log file is available at: /var/tmp/packstack/20180309-001110-LD0XmO/openstack-setup.log
-   * The generated manifests are available at: /var/tmp/packstack/20180309-001110-LD0XmO/manifests
+	Additional information:
+	 * File /root/keystonerc_admin has been created on OpenStack client host 192.168.80.131. To use the command line tools you need to source the file.
+	 * To access the OpenStack Dashboard browse to http://192.168.80.131/dashboard .
+	Please, find your login credentials stored in the keystonerc_admin in your home directory.
+	 * Because of the kernel update the host 192.168.80.131 requires reboot.
+	 * Because of the kernel update the host 192.168.80.133 requires reboot.
+	 * Because of the kernel update the host 192.168.80.132 requires reboot.
+	 * The installation log file is available at: /var/tmp/packstack/20190609-151702-MVmefX/openstack-setup.log
+	 * The generated manifests are available at: /var/tmp/packstack/20190609-151702-MVmefX/manifests
   ```
 
 - Đứng trên `Controller1` thực hiện lệnh dưới để sửa các cấu hình cần thiết.
@@ -302,9 +300,9 @@ https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
 	```sh
 	sed -i -e 's/enable_isolated_metadata=False/enable_isolated_metadata=True/g' /etc/neutron/dhcp_agent.ini
 
-	ssh -o StrictHostKeyChecking=no root@172.16.68.202 "sed -i -e 's/compute1/192.168.80.132/g' /etc/nova/nova.conf"
+	ssh -o StrictHostKeyChecking=no root@192.168.80.132 "sed -i -e 's/compute1/192.168.80.132/g' /etc/nova/nova.conf"
 
-	ssh -o StrictHostKeyChecking=no root@172.16.68.203 "sed -i -e 's/compute2/192.168.80.133/g' /etc/nova/nova.conf""
+	ssh -o StrictHostKeyChecking=no root@192.168.80.133 "sed -i -e 's/compute2/192.168.80.133/g' /etc/nova/nova.conf"
 	```
 
 - Tắt Iptables trên cả 03 node 
@@ -386,4 +384,123 @@ https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
   openstack image list
   ```
 
+#### 4.2. Tạo network
 
+##### 4.2.1. Tạo provider network 
+
+- Tạo provider network 
+
+	```sh 
+	openstack network create  --share --external \
+		--provider-physical-network extnet \
+		--provider-network-type flat net-provider
+	```
+	
+- Taoh subnet cho provider network
+
+	```sh
+	openstack subnet create --network net-provider \
+		--allocation-pool start=192.168.84.201,end=192.168.84.219 \
+		--dns-nameserver 8.8.8.8 --gateway 192.168.84.1 \
+		--subnet-range 192.168.84.0/24 sub-net-provider	
+	```
+
+##### 4.2.2. Tạo private network 
+	
+- Tạo private network 
+
+	```sh
+	openstack network create net-selfservice
+	```
+
+- Tạo subnet cho private network 
+
+	```sh 
+	openstack subnet create --network net-selfservice \
+		--dns-nameserver 8.8.4.4 --gateway 172.199.1.1 \
+		--subnet-range 172.199.1.0/24 sub-net-selfservice
+	```	
+	
+##### 4.2.3. Tạo router
+
+- Tạo router 
+
+	```sh
+	openstack router create R1
+	```
+
+- Gắn các private network vào Router, lệnh này ko hiển thị ra kết quả. Lưu ý điền đúng tên subnet private là `sub-net-selfservice` và tên của router là R1.
+
+	```sh 
+	openstack router add subnet R1 sub-net-selfservice
+	```
+	
+- Gắn gateway cho router, bước này cũng cần điền đúng tên của network provider được tạo ở trên, đó là `net-provider`  và  và tên của router là R1.
+
+	```sh
+	openstack router set router --external-gateway net-provider	
+	```
+
+##### 4.3 Kiểm tra lại các bước thiết lập về network 
+
+
+- Kiểm tra các agent của router và dhcp trên neutron bằng lệnh `ip netns`. Kết quả là: 
+
+
+	```sh
+	root@controller1 ~(keystone_admin)]# ip netns
+	qrouter-4b831df7-470e-4be3-8775-56f2de9897cb (id: 2)
+	qdhcp-0daa313c-2ea0-4be2-9d7f-546a2ae45715 (id: 1)
+	qdhcp-4ac074cc-7055-4fb8-a101-aaba14b6cff4 (id: 0)
+	```
+	
+- Kiểm tra các port của router R1
+
+```sh
+openstack port list --router R1
+```
+
+Kết quả là: 
+
+	```sh
+	+--------------------------------------+------+-------------------+-------------------------------------------------------------------------------+--------+
+	| ID                                   | Name | MAC Address       | Fixed IP Addresses                                                            | Status |
+	+--------------------------------------+------+-------------------+-------------------------------------------------------------------------------+--------+
+	| c05caaed-5712-426e-8a3f-4e5bf9e5cd7c |      | fa:16:3e:4e:7a:b6 | ip_address='172.199.1.1', subnet_id='952a4b55-b6a5-4359-a758-be676e0a365a'    | ACTIVE |
+	| f21af1b2-b58c-4d12-a5cf-d83623fc6d2c |      | fa:16:3e:51:02:92 | ip_address='192.168.84.219', subnet_id='e8e0a0f5-5df2-42f2-b030-fd063f8ec140' | ACTIVE |
+	+--------------------------------------+------+-------------------+-------------------------------------------------------------------------------+--------+
+	```
+
+Lưu ý trong kết quả lệnh trên, ta sẽ thấy IP thuộc VLAN `192.168.84.0/24` là `192.168.84.219`. Đây chính là IP của router, nếu đứng từ máy bạn có thể ping tới IP này thì chứng tỏ việc thiết lập network đã thành công.
+
+	```sh
+	C:\Users\congto>ping 192.168.84.219
+
+	Pinging 192.168.84.219 with 32 bytes of data:
+	Reply from 192.168.84.219: bytes=32 time=17ms TTL=63
+	Reply from 192.168.84.219: bytes=32 time=15ms TTL=63
+	Reply from 192.168.84.219: bytes=32 time=16ms TTL=63
+	Reply from 192.168.84.219: bytes=32 time=15ms TTL=63
+
+	Ping statistics for 192.168.84.219:
+			Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+	Approximate round trip times in milli-seconds:
+			Minimum = 15ms, Maximum = 17ms, Average = 15ms
+	```
+
+##### 4.4. Mở các rule về security group
+
+- Thực hiện mở các rule để có thể truy cập từ ngoài vào VM sau khi tạo xong VM ở các bước tiếp theo.
+
+	```sh
+	openstack security group rule create --proto icmp default
+	openstack security group rule create --proto tcp --dst-port 22 default
+	```
+
+##### 4.5. Tạo VM	
+
+Cách 1: Truy cập vào dashboard ở địa chỉ http://192.168.80.131 để tạo VM.
+Cách 2: Sử dụng lệnh dưới để tạo VM.
+
+
+	
