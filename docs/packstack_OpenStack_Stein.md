@@ -446,7 +446,6 @@ https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
 
 - Kiểm tra các agent của router và dhcp trên neutron bằng lệnh `ip netns`. Kết quả là: 
 
-
 	```sh
 	root@controller1 ~(keystone_admin)]# ip netns
 	qrouter-4b831df7-470e-4be3-8775-56f2de9897cb (id: 2)
@@ -456,11 +455,11 @@ https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
 	
 - Kiểm tra các port của router R1
 
-```sh
-openstack port list --router R1
-```
+	```sh
+	openstack port list --router R1
+	```
 
-Kết quả là: 
+- Kết quả là: 
 
 	```sh
 	+--------------------------------------+------+-------------------+-------------------------------------------------------------------------------+--------+
@@ -471,7 +470,7 @@ Kết quả là:
 	+--------------------------------------+------+-------------------+-------------------------------------------------------------------------------+--------+
 	```
 
-Lưu ý trong kết quả lệnh trên, ta sẽ thấy IP thuộc VLAN `192.168.84.0/24` là `192.168.84.219`. Đây chính là IP của router, nếu đứng từ máy bạn có thể ping tới IP này thì chứng tỏ việc thiết lập network đã thành công.
+- Lưu ý trong kết quả lệnh trên, ta sẽ thấy IP thuộc VLAN `192.168.84.0/24` là `192.168.84.219`. Đây chính là IP của router, nếu đứng từ máy bạn có thể ping tới IP này thì chứng tỏ việc thiết lập network đã thành công.
 
 	```sh
 	C:\Users\congto>ping 192.168.84.219
