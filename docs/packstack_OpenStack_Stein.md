@@ -1,4 +1,4 @@
-# Hương dẫn cài đặt OpenStack Queens bằng Packstack trên CENTOS 7.x
+# Hương dẫn cài đặt OpenStack Stein bằng Packstack trên CENTOS 7.x
 
 
 ## 1. Các bước chuẩn bị
@@ -7,11 +7,11 @@
 - Lưu ý: Trong tài liệu này chỉ thực hiện cài đặt OpenStack, bước cài đặt CEPH ở tài liệu khác.
 - Packstack là một công cụ cài đặt OpenStack nhanh chóng.
 - Packstack được phát triển bởi redhat
-- Chỉ hỗ trợ các distro: RHEL, Centos
+- Chỉ hỗ trợ các distro: RHEL, CentOS.
 - Tự động hóa các bước cài đặt và lựa chọn thành phần cài đặt.
 - Nhanh chóng dựng được môi trường OpenStack để sử dụng làm PoC nội bộ, demo khách hàng, test tính năng.
 - Nhược điểm 1 : Đóng kín các bước cài đối với người mới.
-- Nhược điểm 2: Khó bug các lỗi khi cài vì đã được đóng gói cùng với các tool cài đặt tự động (puppet)
+- Nhược điểm 2: Khó bug các lỗi khi cài vì đã được đóng gói cùng với các tool cài đặt tự động (puppet).
 
 
 ### 1.2. Môi trường thực hiện 
@@ -36,7 +36,7 @@ Lưu ý:
 - Lưu ý: 
   - Sử dụng đúng thứ tự các interface (NICs) của máy để cài đặt OpenStack.
   - Sử dụng đúng các dải địa chỉ IP.
-	- Đối với IP Planning này có thể không cần phải đặt đủ các IP cho các card mạng vì sẽ có các card liên quan tới storae chưa cần sử dụng.
+	- Trong hướng dẫn này  không cần đặt IP cho eth2 vì không sử dụng CEPH.
 
 ## 2. Các bước cài đặt
 ### 2.1. Các bước chuẩn bị trên trên Controller
@@ -88,28 +88,28 @@ init 6
 - Khai báo repos cho OpenStack Queens
 
 	```sh
-	yum install epel-release -y
+	yum install -y epel-release
 	yum install -y centos-release-openstack-stein
 	yum update -y
 
-	sudo yum install -y wget crudini  byobu
-	yum -y install git python-setuptools
+	yum install -y wget crudini  byobu
+	yum install -y git python-setuptools
 	yum install -y openstack-packstack
-
 	```
 
 - Trong queens khi sử dụng packstack để cài có thể gặp lỗi `ERROR : Failed to load plugin from file ssl_001.py`, fix theo hướng dẫn dưới (trong đoạn trên đã cài sẵn các fix rồi nhé)
-```sh
-https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
-```
+
+	```sh
+	https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
+	```
 
 ### 2.2. Các bước chuẩn bị trên trên Compute1
 
 - Thiết lập hostname
 
-    ```sh
-    hostnamectl set-hostname compute1
-    ```
+	```sh
+	hostnamectl set-hostname compute1
+	```
 
 - Thiết lập IP 
 
@@ -154,12 +154,12 @@ https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
 - Khai báo repos cho OpenStack Queens trên node `Compute1`
 
 	```sh
-	yum install epel-release -y
+	yum install -y epel-release
 	yum install -y centos-release-openstack-stein
 	yum update -y
 
-	sudo yum install -y wget crudini  byobu
-	yum -y install git python-setuptools
+	yum install -y wget crudini  byobu
+	yum install -y git python-setuptools
 	yum install -y openstack-packstack
 	```
   
@@ -212,24 +212,25 @@ https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
 
 	init 6
 
-```
+	```
 
 - Khai báo repos cho OpenStack Queens trên node `Compute2`
 
 	```sh
-	yum install epel-release -y
+	yum install -y epel-release
 	yum install -y centos-release-openstack-stein
 	yum update -y
 
-	sudo yum install -y wget crudini  byobu
-	yum -y install git python-setuptools
+	yum install -y wget crudini  byobu
+	yum install -y git python-setuptools
 	yum install -y openstack-packstack
 	```
 
 - Trong queens khi sử dụng packstack để cài có thể gặp lỗi `ERROR : Failed to load plugin from file ssl_001.py`, fix theo hướng dẫn dưới (trong đoạn trên đã cài sẵn các fix rồi nhé)
-```sh
-https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
-```
+
+	```sh
+	https://gist.github.com/congto/36116ef868ee8fe2b2e83249710fee16
+	```
 
 ### 3. Cài đặt OpenStack Queens
 #### 3.1. Chuẩn bị file trả lời cho packstack
